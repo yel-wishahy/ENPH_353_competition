@@ -1,4 +1,4 @@
-prefix=/home/yel-wishahy/ros_ws/devel
+prefix=/home/yel-wishahy/GitHub/ENPH_353_competition/devel
 
 Name: enph353_npcs
 Description: Description of enph353_npcs

@@ -1,4 +1,4 @@
-prefix=/home/yel-wishahy/ros_ws/devel
+prefix=/home/yel-wishahy/GitHub/ENPH_353_competition/devel
 
 Name: adeept_awr_gazebo
 Description: Description of adeept_awr_gazebo

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/yel-wishahy/ros_ws/src
+CMAKE_SOURCE_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/yel-wishahy/ros_ws/build
+CMAKE_BINARY_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/build
 
 # Utility rule file for _adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR.
 
@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/yel-wishahy/ros_ws/build
 include 2020_competition/adeept_awr_ros_driver/CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR.dir/progress.make
 
 2020_competition/adeept_awr_ros_driver/CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR:
-	cd /home/yel-wishahy/ros_ws/build/2020_competition/adeept_awr_ros_driver && ../../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py adeept_awr_ros_driver /home/yel-wishahy/ros_ws/src/2020_competition/adeept_awr_ros_driver/msg/ArrayIR.msg std_msgs/Header
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/adeept_awr_ros_driver && ../../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py adeept_awr_ros_driver /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/adeept_awr_ros_driver/msg/ArrayIR.msg std_msgs/Header
 
 _adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR: 2020_competition/adeept_awr_ros_driver/CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR
 _adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR: 2020_competition/adeept_awr_ros_driver/CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR.dir/build.make
@@ -67,10 +67,10 @@ _adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR: 2020_competition/ad
 .PHONY : 2020_competition/adeept_awr_ros_driver/CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR.dir/build
 
 2020_competition/adeept_awr_ros_driver/CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR.dir/clean:
-	cd /home/yel-wishahy/ros_ws/build/2020_competition/adeept_awr_ros_driver && $(CMAKE_COMMAND) -P CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR.dir/cmake_clean.cmake
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/adeept_awr_ros_driver && $(CMAKE_COMMAND) -P CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR.dir/cmake_clean.cmake
 .PHONY : 2020_competition/adeept_awr_ros_driver/CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR.dir/clean
 
 2020_competition/adeept_awr_ros_driver/CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR.dir/depend:
-	cd /home/yel-wishahy/ros_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/ros_ws/src /home/yel-wishahy/ros_ws/src/2020_competition/adeept_awr_ros_driver /home/yel-wishahy/ros_ws/build /home/yel-wishahy/ros_ws/build/2020_competition/adeept_awr_ros_driver /home/yel-wishahy/ros_ws/build/2020_competition/adeept_awr_ros_driver/CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/GitHub/ENPH_353_competition/src /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/adeept_awr_ros_driver /home/yel-wishahy/GitHub/ENPH_353_competition/build /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/adeept_awr_ros_driver /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/adeept_awr_ros_driver/CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : 2020_competition/adeept_awr_ros_driver/CMakeFiles/_adeept_awr_ros_driver_generate_messages_check_deps_ArrayIR.dir/depend
 

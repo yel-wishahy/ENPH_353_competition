@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/yel-wishahy/ros_ws/src
+CMAKE_SOURCE_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/yel-wishahy/ros_ws/build
+CMAKE_BINARY_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/build
 
 # Utility rule file for download_extra_data.
 
@@ -67,6 +67,6 @@ CMakeFiles/download_extra_data.dir/clean:
 .PHONY : CMakeFiles/download_extra_data.dir/clean
 
 CMakeFiles/download_extra_data.dir/depend:
-	cd /home/yel-wishahy/ros_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/ros_ws/src /home/yel-wishahy/ros_ws/src /home/yel-wishahy/ros_ws/build /home/yel-wishahy/ros_ws/build /home/yel-wishahy/ros_ws/build/CMakeFiles/download_extra_data.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/GitHub/ENPH_353_competition/src /home/yel-wishahy/GitHub/ENPH_353_competition/src /home/yel-wishahy/GitHub/ENPH_353_competition/build /home/yel-wishahy/GitHub/ENPH_353_competition/build /home/yel-wishahy/GitHub/ENPH_353_competition/build/CMakeFiles/download_extra_data.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/download_extra_data.dir/depend
 

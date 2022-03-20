@@ -67,14 +67,14 @@ set(test_controller_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(test_controller_SOURCE_PREFIX /home/yel-wishahy/ros_ws/src/test_controller)
-  set(test_controller_DEVEL_PREFIX /home/yel-wishahy/ros_ws/devel)
+  set(test_controller_SOURCE_PREFIX /home/yel-wishahy/GitHub/ENPH_353_competition/src/test_controller)
+  set(test_controller_DEVEL_PREFIX /home/yel-wishahy/GitHub/ENPH_353_competition/devel)
   set(test_controller_INSTALL_PREFIX "")
   set(test_controller_PREFIX ${test_controller_DEVEL_PREFIX})
 else()
   set(test_controller_SOURCE_PREFIX "")
   set(test_controller_DEVEL_PREFIX "")
-  set(test_controller_INSTALL_PREFIX /home/yel-wishahy/ros_ws/install)
+  set(test_controller_INSTALL_PREFIX /home/yel-wishahy/GitHub/ENPH_353_competition/install)
   set(test_controller_PREFIX ${test_controller_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/yel-wishahy/ros_ws/install/lib;/home/yel-wishahy/ros_ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/yel-wishahy/GitHub/ENPH_353_competition/install/lib;/opt/ros/melodic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

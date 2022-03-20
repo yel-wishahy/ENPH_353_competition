@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/yel-wishahy/ros_ws/src
+CMAKE_SOURCE_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/yel-wishahy/ros_ws/build
+CMAKE_BINARY_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/build
 
 # Utility rule file for std_msgs_generate_messages_nodejs.
 
@@ -63,10 +63,10 @@ std_msgs_generate_messages_nodejs: 2020_competition/enph353/enph353_utils/CMakeF
 .PHONY : 2020_competition/enph353/enph353_utils/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
 
 2020_competition/enph353/enph353_utils/CMakeFiles/std_msgs_generate_messages_nodejs.dir/clean:
-	cd /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_utils && $(CMAKE_COMMAND) -P CMakeFiles/std_msgs_generate_messages_nodejs.dir/cmake_clean.cmake
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_utils && $(CMAKE_COMMAND) -P CMakeFiles/std_msgs_generate_messages_nodejs.dir/cmake_clean.cmake
 .PHONY : 2020_competition/enph353/enph353_utils/CMakeFiles/std_msgs_generate_messages_nodejs.dir/clean
 
 2020_competition/enph353/enph353_utils/CMakeFiles/std_msgs_generate_messages_nodejs.dir/depend:
-	cd /home/yel-wishahy/ros_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/ros_ws/src /home/yel-wishahy/ros_ws/src/2020_competition/enph353/enph353_utils /home/yel-wishahy/ros_ws/build /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_utils /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_utils/CMakeFiles/std_msgs_generate_messages_nodejs.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/GitHub/ENPH_353_competition/src /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_utils /home/yel-wishahy/GitHub/ENPH_353_competition/build /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_utils /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_utils/CMakeFiles/std_msgs_generate_messages_nodejs.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : 2020_competition/enph353/enph353_utils/CMakeFiles/std_msgs_generate_messages_nodejs.dir/depend
 

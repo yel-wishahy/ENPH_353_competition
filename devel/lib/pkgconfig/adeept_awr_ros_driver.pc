@@ -1,8 +1,8 @@
-prefix=/home/yel-wishahy/ros_ws/devel
+prefix=/home/yel-wishahy/GitHub/ENPH_353_competition/devel
 
 Name: adeept_awr_ros_driver
 Description: Description of adeept_awr_ros_driver
 Version: 0.0.0
-Cflags: -I/home/yel-wishahy/ros_ws/devel/include
+Cflags: -I/home/yel-wishahy/GitHub/ENPH_353_competition/devel/include
 Libs: -L${prefix}/lib 
 Requires: rospy std_msgs message_runtime

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/yel-wishahy/ros_ws/src
+CMAKE_SOURCE_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/yel-wishahy/ros_ws/build
+CMAKE_BINARY_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/build
 
 # Utility rule file for enph353_utils_generate_messages_lisp.
 
@@ -63,10 +63,10 @@ enph353_utils_generate_messages_lisp: 2020_competition/enph353/enph353_utils/CMa
 .PHONY : 2020_competition/enph353/enph353_utils/CMakeFiles/enph353_utils_generate_messages_lisp.dir/build
 
 2020_competition/enph353/enph353_utils/CMakeFiles/enph353_utils_generate_messages_lisp.dir/clean:
-	cd /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_utils && $(CMAKE_COMMAND) -P CMakeFiles/enph353_utils_generate_messages_lisp.dir/cmake_clean.cmake
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_utils && $(CMAKE_COMMAND) -P CMakeFiles/enph353_utils_generate_messages_lisp.dir/cmake_clean.cmake
 .PHONY : 2020_competition/enph353/enph353_utils/CMakeFiles/enph353_utils_generate_messages_lisp.dir/clean
 
 2020_competition/enph353/enph353_utils/CMakeFiles/enph353_utils_generate_messages_lisp.dir/depend:
-	cd /home/yel-wishahy/ros_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/ros_ws/src /home/yel-wishahy/ros_ws/src/2020_competition/enph353/enph353_utils /home/yel-wishahy/ros_ws/build /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_utils /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_utils/CMakeFiles/enph353_utils_generate_messages_lisp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/GitHub/ENPH_353_competition/src /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_utils /home/yel-wishahy/GitHub/ENPH_353_competition/build /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_utils /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_utils/CMakeFiles/enph353_utils_generate_messages_lisp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : 2020_competition/enph353/enph353_utils/CMakeFiles/enph353_utils_generate_messages_lisp.dir/depend
 

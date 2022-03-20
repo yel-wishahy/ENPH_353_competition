@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/yel-wishahy/ros_ws/src/2020_competition/enph353/enph353_gazebo/include/enph353_gazebo/collision_plugin.h
+/home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo/include/enph353_gazebo/collision_plugin.h
 gazebo/common/Plugin.hh
 -
 gazebo/transport/transport.hh
@@ -16,7 +16,7 @@ ros/ros.h
 std_msgs/Bool.h
 -
 
-/home/yel-wishahy/ros_ws/src/2020_competition/enph353/enph353_gazebo/src/collision_plugin.cpp
+/home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo/src/collision_plugin.cpp
 enph353_gazebo/collision_plugin.h
 -
 gazebo/common/Plugin.hh

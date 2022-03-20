@@ -7,4 +7,6 @@
 # new environment variables
 
 # modified environment variables
-export PWD='/home/yel-wishahy/ros_ws/build'
+export CMAKE_PREFIX_PATH="/home/yel-wishahy/GitHub/ENPH_353_competition/devel:$CMAKE_PREFIX_PATH"
+export PWD='/home/yel-wishahy/GitHub/ENPH_353_competition/build'
+export ROS_PACKAGE_PATH="/home/yel-wishahy/GitHub/ENPH_353_competition/src:$ROS_PACKAGE_PATH"

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/yel-wishahy/ros_ws/src
+CMAKE_SOURCE_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/yel-wishahy/ros_ws/build
+CMAKE_BINARY_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/build
 
 # Include any dependencies generated for this target.
 include 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/depend.make
@@ -58,17 +58,17 @@ include 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/
 include 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/flags.make
 
 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.o: 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/flags.make
-2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.o: /home/yel-wishahy/ros_ws/src/2020_competition/enph353/enph353_gazebo/src/collision_plugin.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yel-wishahy/ros_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.o"
-	cd /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_gazebo && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.o -c /home/yel-wishahy/ros_ws/src/2020_competition/enph353/enph353_gazebo/src/collision_plugin.cpp
+2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.o: /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo/src/collision_plugin.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yel-wishahy/GitHub/ENPH_353_competition/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.o"
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.o -c /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo/src/collision_plugin.cpp
 
 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.i"
-	cd /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_gazebo && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/yel-wishahy/ros_ws/src/2020_competition/enph353/enph353_gazebo/src/collision_plugin.cpp > CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.i
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo/src/collision_plugin.cpp > CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.i
 
 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.s"
-	cd /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_gazebo && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yel-wishahy/ros_ws/src/2020_competition/enph353/enph353_gazebo/src/collision_plugin.cpp -o CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.s
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo/src/collision_plugin.cpp -o CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.s
 
 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.o.requires:
 
@@ -88,153 +88,153 @@ collision_plugin_OBJECTS = \
 # External object files for target collision_plugin
 collision_plugin_EXTERNAL_OBJECTS =
 
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.o
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/build.make
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libgazebo_ros_api_plugin.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libgazebo_ros_paths_plugin.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libtinyxml.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libroslib.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librospack.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libpython2.7.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libtinyxml2.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libtf.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libtf2_ros.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libactionlib.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libmessage_filters.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libtf2.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libdynamic_reconfigure_config_init_mutex.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libroscpp.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librosconsole.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librosconsole_log4cxx.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librosconsole_backend_interface.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/liblog4cxx.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_regex.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libroscpp_serialization.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libxmlrpcpp.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librostime.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libcpp_common.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_system.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_thread.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libpthread.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libSimTKsimbody.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libSimTKmath.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libSimTKcommon.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libblas.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/liblapack.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libblas.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_client.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_gui.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_sensors.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_rendering.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_physics.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_ode.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_transport.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_msgs.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_util.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_common.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_gimpact.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_opcode.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_opende_ou.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_ccd.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_thread.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_system.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_regex.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_iostreams.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libpthread.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libprotobuf.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libsdformat.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libOgreMain.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_thread.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_system.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libpthread.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libOgreTerrain.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libOgrePaging.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libignition-transport4.so.4.0.0
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libignition-msgs1.so.1.0.0
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libignition-common1.so.1.1.1
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libignition-fuel_tools1.so.1.2.0
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libtinyxml2.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libtf.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libtf2_ros.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libactionlib.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libmessage_filters.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libtf2.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libdynamic_reconfigure_config_init_mutex.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libroscpp.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librosconsole.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librosconsole_log4cxx.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librosconsole_backend_interface.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/liblog4cxx.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_regex.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libroscpp_serialization.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libxmlrpcpp.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librostime.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libcpp_common.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libSimTKsimbody.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libSimTKmath.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libSimTKcommon.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libblas.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/liblapack.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_client.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_gui.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_sensors.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_rendering.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_physics.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_ode.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_transport.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_msgs.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_util.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_common.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_gimpact.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_opcode.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_opende_ou.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_ccd.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_iostreams.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libprotobuf.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libsdformat.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libOgreMain.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libOgreTerrain.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libOgrePaging.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libprotobuf.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libignition-math4.so.4.0.0
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libuuid.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libuuid.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libswscale.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libswscale.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavdevice.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavdevice.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavformat.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavformat.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavcodec.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavcodec.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavutil.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavutil.so
-/home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so: 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/yel-wishahy/ros_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library /home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so"
-	cd /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_gazebo && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/collision_plugin.dir/link.txt --verbose=$(VERBOSE)
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.o
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/build.make
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libgazebo_ros_api_plugin.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libgazebo_ros_paths_plugin.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libtinyxml.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libroslib.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librospack.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libpython2.7.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libtinyxml2.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libtf.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libtf2_ros.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libactionlib.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libmessage_filters.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libtf2.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libdynamic_reconfigure_config_init_mutex.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libroscpp.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librosconsole.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librosconsole_log4cxx.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librosconsole_backend_interface.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/liblog4cxx.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_regex.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libroscpp_serialization.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libxmlrpcpp.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librostime.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libcpp_common.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_system.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libpthread.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libSimTKsimbody.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libSimTKmath.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libSimTKcommon.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libblas.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/liblapack.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libblas.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_client.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_gui.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_sensors.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_rendering.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_physics.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_ode.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_transport.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_msgs.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_util.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_common.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_gimpact.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_opcode.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_opende_ou.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_ccd.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_system.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_regex.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_iostreams.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libpthread.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libprotobuf.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libsdformat.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libOgreMain.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_system.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libpthread.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libOgreTerrain.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libOgrePaging.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libignition-transport4.so.4.0.0
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libignition-msgs1.so.1.0.0
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libignition-common1.so.1.1.1
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libignition-fuel_tools1.so.1.2.0
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libtinyxml2.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libtf.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libtf2_ros.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libactionlib.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libmessage_filters.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libtf2.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libdynamic_reconfigure_config_init_mutex.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libroscpp.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librosconsole.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librosconsole_log4cxx.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librosconsole_backend_interface.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/liblog4cxx.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_regex.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libroscpp_serialization.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libxmlrpcpp.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/librostime.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /opt/ros/melodic/lib/libcpp_common.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libSimTKsimbody.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libSimTKmath.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libSimTKcommon.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libblas.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/liblapack.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_client.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_gui.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_sensors.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_rendering.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_physics.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_ode.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_transport.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_msgs.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_util.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_common.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_gimpact.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_opcode.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_opende_ou.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libgazebo_ccd.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libboost_iostreams.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libprotobuf.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libsdformat.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libOgreMain.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libOgreTerrain.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libOgrePaging.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libprotobuf.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libignition-math4.so.4.0.0
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libuuid.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libuuid.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libswscale.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libswscale.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavdevice.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavdevice.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavformat.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavformat.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavcodec.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavcodec.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavutil.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: /usr/lib/x86_64-linux-gnu/libavutil.so
+/home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so: 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/yel-wishahy/GitHub/ENPH_353_competition/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library /home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so"
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/collision_plugin.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/build: /home/yel-wishahy/ros_ws/devel/lib/libcollision_plugin.so
+2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/build: /home/yel-wishahy/GitHub/ENPH_353_competition/devel/lib/libcollision_plugin.so
 
 .PHONY : 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/build
 
@@ -243,10 +243,10 @@ collision_plugin_EXTERNAL_OBJECTS =
 .PHONY : 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/requires
 
 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/clean:
-	cd /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_gazebo && $(CMAKE_COMMAND) -P CMakeFiles/collision_plugin.dir/cmake_clean.cmake
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo && $(CMAKE_COMMAND) -P CMakeFiles/collision_plugin.dir/cmake_clean.cmake
 .PHONY : 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/clean
 
 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/depend:
-	cd /home/yel-wishahy/ros_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/ros_ws/src /home/yel-wishahy/ros_ws/src/2020_competition/enph353/enph353_gazebo /home/yel-wishahy/ros_ws/build /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_gazebo /home/yel-wishahy/ros_ws/build/2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/GitHub/ENPH_353_competition/src /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo /home/yel-wishahy/GitHub/ENPH_353_competition/build /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : 2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/depend
 
