@@ -7,10 +7,16 @@ ENPH 353 ML Project
 
 **Author(s):** Yousif El-Wishahy
 
+## Table of Contents
+1. [Setting up repo and workspace](#setup)
+2. [Launch Gazebo Sim](#launch)
+3. [Gazebo / Robot Settings](#settings)
+4. [Controller Settings](#controller_settings)
+
 
 <br />
 
-## Setting up repo and ros ws
+## Setting up repo and ros ws <a name="setup"></a>
 
 **You can just clone this repo as it contains the latest competition package**
 
@@ -29,7 +35,7 @@ Your file tree should look like this:
 
 <br />
 
-## Launching Controller Node
+## Launching Controller Node <a name="launch"></a>
 
 There is no ros launch file as of yet since this is a since node named **test_controller**. It subscribes to the raw camera feed at the topic: */R1/pi_camera/image_raw*, and publishes to the topic: */R1/cmd_vel* to move the robot.
 
@@ -50,7 +56,7 @@ Launching the node takes one command if you've run `catkin_make` and sourced the
 
 <br />
 
-## Gazebo Settings
+## Gazebo Settings <a name="settings"></a>
 
 <br />
 
@@ -107,5 +113,5 @@ In this file you'll find the section:
 
 <br />
 
-## robot_driver.py
+## robot_driver.py <a name="controller_settings"></a>
 If `DEBUG=true` at the top of the file, pid error values and camera feed will be displayed.
