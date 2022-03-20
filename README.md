@@ -12,24 +12,31 @@ ENPH 353 ML Project
 
 ## Setting up ros package
 
+**You can just clone this repo as it contains the latest competition package**
+
 Info for setting up and launching the competion can be found in the competion notes doc : [Competition Notes](https://docs.google.com/document/d/1FNGecS2-8v_lKdlxzUxki_ZMZeK3RGqgdYo-JMTh0OQ/edit) 
 
 What to do when cloning this repo:
-The test_controller package should be placed in the competition ros workspace within /src/ and run `catkin_make` to ensure the package is recognized.
-Source setup.bash (with `source ~/<workspace name>/devel/setup.bash`) from the ros ws aften running `catkin_make`.
+1. Clone this repo
+2. cd to repo
+3. Run `catkin clean` or delete the *devel* and *build* folders
+4. Run `catkin_make`
 
+
+Your file tree should look like this:
+![image](readme/tree.png)
 <br />
 
 ## Launching Controller Node
 
-There is no ros launch file as of yet since this is a since node named `test_controller`. It subscribes to the raw camera feed at the topic: `/R1/pi_camera/image_raw`, and publishes to the topic: `/R1/cmd_vel` to move the robot.
+There is no ros launch file as of yet since this is a since node named **test_controller**. It subscribes to the raw camera feed at the topic: */R1/pi_camera/image_raw*, and publishes to the topic: */R1/cmd_vel* to move the robot.
 
 Before launching the node:
 
 1. Source competition setup.bash file 
-    * If you follow the doc it should be `source ~/ros_ws/devel/setup.bash`)
+    * If you follow the doc it should be `source ~/ENPH_353_COMPETION/devel/setup.bash`)
 2. Launch competition world 
-    * `cd ~/ros_ws/src/2020_competition/enph353/enph353_utils/scripts`
+    * `cd ~/ENPH_353_COMPETION/src/2020_competition/enph353/enph353_utils/scripts`
     * `./run_sim.sh -vpg`
 3. Launch score tracker (i don't really use this rn)
 
