@@ -19,7 +19,7 @@ Info for setting up and launching the competion can be found in the competion no
 What to do when cloning this repo:
 1. Clone this repo
 2. cd to repo
-3. Run `catkin clean` or delete the *devel* and *build* folders
+3. Run `catkin_make clean` or delete the *devel* and *build* folders
 4. Run `catkin_make`
 
 
