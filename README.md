@@ -10,7 +10,7 @@ ENPH 353 ML Project
 
 <br />
 
-## Setting up ros package
+## Setting up repo and ros ws
 
 **You can just clone this repo as it contains the latest competition package**
 
