@@ -42,9 +42,9 @@ There is no ros launch file as of yet since this is a since node named **test_co
 Before launching the node:
 
 1. Source competition setup.bash file 
-    * If you follow the doc it should be `source ~/ENPH_353_COMPETION/devel/setup.bash`
+    * If you follow the doc it should be `source ~/ENPH_353_competition/devel/setup.bash`
 2. Launch competition world 
-    * `cd ~/ENPH_353_COMPETION/src/2020_competition/enph353/enph353_utils/scripts`
+    * `cd ~/ENPH_353_competition/src/2020_competition/enph353/enph353_utils/scripts`
     * `./run_sim.sh -vpg`
 3. Launch score tracker (i don't really use this rn)
 
