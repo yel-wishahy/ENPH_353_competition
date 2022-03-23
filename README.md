@@ -1,8 +1,7 @@
-# ENPH_353_competition - time_trials
+# ENPH_353_competition - test_controller
 ENPH 353 ML Project 
 
-**Repo:** time_trials
-
+**Repo:**  test_controller
 **Description:** This repo contains a ros package that test controller for time trials that controls the robot in the enph-353 gazebo environment. 
 
 **Author(s):** Yousif El-Wishahy
