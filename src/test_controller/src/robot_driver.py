@@ -72,17 +72,17 @@ class image_processor:
     #gets the grayed version of img with desired colour filter
     #if clr='b' it will gray based on blue filter
     #otherwise white
-    def get_gray(self,img, clr):
+    def get_gray(self,img, clr='w'):
         if(clr is 'b'):
             threshold = 20
             _, img_blue = cv2.threshold(img, threshold, 255, cv2.THRESH_BINARY)
             inv = 255-img_blue
             gray = cv2.cvtColor(inv, cv2.COLOR_BGR2GRAY)
             return gray
-        
-        inv = (255-img)
-        gray = cv2.cvtColor(inv, cv2.COLOR_BGR2GRAY)
-        return gray
+        if(clr is 'w'):
+            inv = (255-img)
+            gray = cv2.cvtColor(inv, cv2.COLOR_BGR2GRAY)
+            return gray
 
     #given a source image and a grayed version of it that image highlight the desired colour
     #finds the contours and returns them
@@ -101,7 +101,7 @@ class image_processor:
         # Find the contours of the frame
         _,contours,_ = cv2.findContours(mask.copy(), 1, cv2.CHAIN_APPROX_NONE)
 
-        return contours
+        return sorted(contours,key=cv2.contourArea,reverse=True)
 
 
 
@@ -297,29 +297,32 @@ class PID_controller():
         return xerror
     
     #gets largest contour points as 2d points on img
+    #contours must be sorted from largest to smallest before being passed to this function
     #points are sorted based on contour area size from smallest to largest
-    #optionally draws 2 largest contour point as 2 intersecting lines on a copy of image.
     def get_contour_points(self,contours):
         #arrays for path contour centre points
-        xs = []
-        ys = []
+        points = []
         # Find the 2 biggest contour (if detected), these should be the 2 white lines (due to inversion)
         if len(contours) > 0:
-            c = sorted(contours,key=cv2.contourArea)
-            for i in range(1,3):
-                M = cv2.moments(c[len(c)-i])
+            for c in contours[:10]:
+                M = cv2.moments(c)
                 cx = int(M['m10']/M['m00'])
                 cy = int(M['m01']/M['m00'])
-                xs.append(cx)
-                ys.append(cy)
+                points.append((cx,cy))
 
-        if(len(xs) > 0 and len(ys) > 0):
-            xs = np.sort(xs)
-            ys= np.sort(ys)
+        print('points', points)
+        pts = np.array(points)
+        print('np array points',pts)
+        return pts
 
-        return xs,ys
+    def pointContourTest(self,contour,points):
+        result = []
 
-
+        for pt in points:
+            print(pt)
+            result.append(cv2.pointPolygonTest(contour,tuple(pt),measureDist=False))
+        
+        return np.array(result)
 
     #obtains error from camera feed frame by using cv2.findContours
     #
@@ -342,42 +345,55 @@ class PID_controller():
         min_reading_error = 25
 
         # centre points relative to robot camera (i.e. centre of image)
-        x_robot = image.shape[1] / 2
-        y_robot = image.shape[0] / 2 
+        pt_robot = np.array([image.shape[1],image.shape[0]])/2
 
-        gray = self.img_processor.get_gray(image,clr='w')
-        contours = self.img_processor.get_contours(image,gray)
-        xs,ys= self.get_contour_points(contours)
+        #contour detection with white filter
+        gray_w = self.img_processor.get_gray(image,clr='w')
+        contours_w = self.img_processor.get_contours(image,gray_w)
+        pts_w= self.get_contour_points(contours_w)
+
+        #contour detection with blue filter
+        gray_b = self.img_processor.get_gray(image,clr='b')
+        contours_b = self.img_processor.get_contours(image,gray_b)
+        pts_b= self.get_contour_points(contours_b)
         
-
-        x_path = 0
-        y_path = 0
+        pt_path = np.array([0,0])
         #check that more than one contour is detected
-        if(len(xs) > 1 and len(ys)>1):
-            #path centre relative to white lanes/ borders
-            x_path = xs[0] + (xs[1] - xs[0])/2
-            y_path = ys[0] + (ys[1] - ys[0])/2 
+        if(pts_w.shape[0] > 1):
+            # if(len(contours_b) > 0):
+            #     results = self.pointContourTest(contours_b[0], pts_w[:2])
+            #     for r in results:
+            #         if(r >= 0):
+            #             xerror = 0
+            #             print('found path point on blue contour, bad!')
+            # else:    
+                #path centre relative to white lanes/ borders
+                pt_path = pts_w[0] + (pts_w[1] - pts_w[0])/2
 
-            displacement_x = x_robot - x_path
-            displacement_y = y_robot - y_path
+                displacement = pt_robot - pt_path
 
+                sign_x = displacement[0] / np.abs(displacement[0])
 
-            sign_x = displacement_x / np.abs(displacement_x)
-
-            xerror = sign_x * np.interp(np.abs(displacement_x),
-                                        [min_reading_error, max_reading_error],
-                                        [0, MAX_ERROR])
-
+                xerror = sign_x * np.interp(np.abs(displacement[0]),
+                                            [min_reading_error, max_reading_error],
+                                            [0, MAX_ERROR])
+        
+        pt_parking = np.array([0,0])
+        if(pts_b.size > 0):
+            pt_parking = pts_b[0]
+            
 
         if(DEBUG):
-            for i in range(len(xs[:2])):
+            for i in range(len(pts_w[:2])):
                 #for debugging only
-                cv2.line(image_contour,(xs[i],0),(xs[i],720),(255,0,0),1)
-                cv2.line(image_contour,(0,ys[i]),(1280,ys[i]),(255,0,0),1)
-                cv2.drawContours(image_contour, contours, -1, (0,255,0), 1)
+                cv2.line(image_contour,(pts_w[i][0],0),(pts_w[i][0],720),(255,0,0),1)
+                cv2.line(image_contour,(0,pts_w[i][1]),(1280,pts_w[i][1]),(255,0,0),1)
+                cv2.drawContours(image_contour, contours_w, -1, (0,255,0), 1)
 
-            cv2.line(image_contour,(int(x_path),0),(int(x_path),720),(0,255,0),1)
-            cv2.line(image_contour,(0,int(y_path)),(1280,int(y_path)),(0,255,0),1)
+            cv2.line(image_contour,(int(pt_path[0]),0),(int(pt_path[0]),720),(0,255,0),1)
+            cv2.line(image_contour,(0,int(pt_path[1])),(1280,int(pt_path[1])),(0,255,0),1)
+            cv2.line(image_contour,(int(pt_parking[0]),0),(int(pt_parking[0]),720),(0,0,255),1)
+            cv2.line(image_contour,(0,int(pt_parking[1])),(1280,int(pt_parking[1])),(0,0,255),1)
 
         self.last_error = xerror
         print('X Error: ', xerror)

@@ -8,5 +8,8 @@
 
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/yel-wishahy/ENPH_353_competition/devel:$CMAKE_PREFIX_PATH"
+export LD_LIBRARY_PATH="/home/yel-wishahy/ENPH_353_competition/devel/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/home/yel-wishahy/ENPH_353_competition/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/home/yel-wishahy/ENPH_353_competition/build'
+export PYTHONPATH="/home/yel-wishahy/ENPH_353_competition/devel/lib/python2.7/dist-packages:$PYTHONPATH"
 export ROS_PACKAGE_PATH="/home/yel-wishahy/ENPH_353_competition/src:$ROS_PACKAGE_PATH"
