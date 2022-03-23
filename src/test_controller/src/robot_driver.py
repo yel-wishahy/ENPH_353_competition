@@ -14,6 +14,8 @@ import matplotlib.animation as animation
 from multiprocessing import Pool
 from multiprocessing import Process
 
+import time
+
 #controller node name
 controller_node = "test_controller"
 #competition ros topics
@@ -108,6 +110,7 @@ class PID_controller():
         self.border_clr = [0,0,0]
         
         self.drive_pub = rospy.Publisher(cmd_vel_topic, Twist, queue_size=1)
+        self.license_plate_pub = rospy.Publisher("/license_plate", String, queue_size=1)
         self.img_processor = image_processor()
 
         self.last_error = 0
@@ -120,8 +123,27 @@ class PID_controller():
 
         self.move_state = 0
 
+        #Setting an arbitrary state to start timer at
+        self.state = 1
+        time.sleep(1)
+
+
     #main control loop for pid controller
     def control_loop(self):
+
+        #Printing state of machine to get a live display, publishing msg to start timer
+        print("****State: {}".format(self.state))
+        if (self.state == 1):
+            print("==== Start timer")
+            self.license_plate_pub.publish(String("Team1,pass,0,AAAA"))
+
+        #After about 25 secs, state will reach 500. Enough time for the robot to have 
+        #moved 1m, will then stop timer; feel free to adjust
+        self.state +=1
+        if self.state == 500:
+            self.license_plate_pub.publish(String("Team1,pass,-1,AAAA"))
+
+
         if(self.img_processor.empty is False):
             image = self.img_processor.latest_img
 
