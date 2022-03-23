@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/adeept_awr_ros_driver_generate_messages_nodejs"
-  "/home/yel-wishahy/GitHub/ENPH_353_competition/devel/share/gennodejs/ros/adeept_awr_ros_driver/msg/ArrayIR.js"
+  "/home/yel-wishahy/ENPH_353_competition/devel/share/gennodejs/ros/adeept_awr_ros_driver/msg/ArrayIR.js"
 )
 
 # Per-language clean rules from dependency scanning.

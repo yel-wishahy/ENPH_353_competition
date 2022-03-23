@@ -1,8 +1,8 @@
-# Install script for directory: /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/adeept_awr/adeept_awr
+# Install script for directory: /home/yel-wishahy/ENPH_353_competition/src/2020_competition/adeept_awr/adeept_awr
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/yel-wishahy/GitHub/ENPH_353_competition/install")
+  set(CMAKE_INSTALL_PREFIX "/home/yel-wishahy/ENPH_353_competition/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,6 +38,6 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/adeept_awr" TYPE FILE FILES "/home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/adeept_awr/adeept_awr/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/adeept_awr" TYPE FILE FILES "/home/yel-wishahy/ENPH_353_competition/src/2020_competition/adeept_awr/adeept_awr/package.xml")
 endif()
 

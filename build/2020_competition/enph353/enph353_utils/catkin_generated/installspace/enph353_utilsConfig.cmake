@@ -67,14 +67,14 @@ set(enph353_utils_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(enph353_utils_SOURCE_PREFIX /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_utils)
-  set(enph353_utils_DEVEL_PREFIX /home/yel-wishahy/GitHub/ENPH_353_competition/devel)
+  set(enph353_utils_SOURCE_PREFIX /home/yel-wishahy/ENPH_353_competition/src/2020_competition/enph353/enph353_utils)
+  set(enph353_utils_DEVEL_PREFIX /home/yel-wishahy/ENPH_353_competition/devel)
   set(enph353_utils_INSTALL_PREFIX "")
   set(enph353_utils_PREFIX ${enph353_utils_DEVEL_PREFIX})
 else()
   set(enph353_utils_SOURCE_PREFIX "")
   set(enph353_utils_DEVEL_PREFIX "")
-  set(enph353_utils_INSTALL_PREFIX /home/yel-wishahy/GitHub/ENPH_353_competition/install)
+  set(enph353_utils_INSTALL_PREFIX /home/yel-wishahy/ENPH_353_competition/install)
   set(enph353_utils_PREFIX ${enph353_utils_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/yel-wishahy/GitHub/ENPH_353_competition/install/lib;/opt/ros/melodic/lib)
+    foreach(path /home/yel-wishahy/ENPH_353_competition/install/lib;/opt/ros/melodic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

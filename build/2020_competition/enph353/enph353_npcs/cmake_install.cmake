@@ -1,8 +1,8 @@
-# Install script for directory: /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_npcs
+# Install script for directory: /home/yel-wishahy/ENPH_353_competition/src/2020_competition/enph353/enph353_npcs
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/yel-wishahy/GitHub/ENPH_353_competition/install")
+  set(CMAKE_INSTALL_PREFIX "/home/yel-wishahy/ENPH_353_competition/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_npcs/catkin_generated/installspace/enph353_npcs.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/yel-wishahy/ENPH_353_competition/build/2020_competition/enph353/enph353_npcs/catkin_generated/installspace/enph353_npcs.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_npcs/cmake" TYPE FILE FILES
-    "/home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_npcs/catkin_generated/installspace/enph353_npcsConfig.cmake"
-    "/home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_npcs/catkin_generated/installspace/enph353_npcsConfig-version.cmake"
+    "/home/yel-wishahy/ENPH_353_competition/build/2020_competition/enph353/enph353_npcs/catkin_generated/installspace/enph353_npcsConfig.cmake"
+    "/home/yel-wishahy/ENPH_353_competition/build/2020_competition/enph353/enph353_npcs/catkin_generated/installspace/enph353_npcsConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_npcs" TYPE FILE FILES "/home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_npcs/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_npcs" TYPE FILE FILES "/home/yel-wishahy/ENPH_353_competition/src/2020_competition/enph353/enph353_npcs/package.xml")
 endif()
 

@@ -21,6 +21,7 @@ controller_node = "test_controller"
 #competition ros topics
 camera_feed_topic = "/R1/pi_camera/image_raw"
 cmd_vel_topic = "/R1/cmd_vel"
+license_plate_topic = "/license_plate"
 
 #debug /tune mode
 DEBUG = True
@@ -110,7 +111,7 @@ class PID_controller():
         self.border_clr = [0,0,0]
         
         self.drive_pub = rospy.Publisher(cmd_vel_topic, Twist, queue_size=1)
-        self.license_plate_pub = rospy.Publisher("/license_plate", String, queue_size=1)
+        self.license_plate_pub = rospy.Publisher(license_plate_topic, String, queue_size=1)
         self.img_processor = image_processor()
 
         self.last_error = 0

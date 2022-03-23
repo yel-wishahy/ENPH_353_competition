@@ -1,8 +1,8 @@
-# Install script for directory: /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/adeept_awr/adeept_awr_description
+# Install script for directory: /home/yel-wishahy/ENPH_353_competition/src/2020_competition/adeept_awr/adeept_awr_description
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/yel-wishahy/GitHub/ENPH_353_competition/install")
+  set(CMAKE_INSTALL_PREFIX "/home/yel-wishahy/ENPH_353_competition/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/adeept_awr/adeept_awr_description/catkin_generated/installspace/adeept_awr_description.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/yel-wishahy/ENPH_353_competition/build/2020_competition/adeept_awr/adeept_awr_description/catkin_generated/installspace/adeept_awr_description.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/adeept_awr_description/cmake" TYPE FILE FILES
-    "/home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/adeept_awr/adeept_awr_description/catkin_generated/installspace/adeept_awr_descriptionConfig.cmake"
-    "/home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/adeept_awr/adeept_awr_description/catkin_generated/installspace/adeept_awr_descriptionConfig-version.cmake"
+    "/home/yel-wishahy/ENPH_353_competition/build/2020_competition/adeept_awr/adeept_awr_description/catkin_generated/installspace/adeept_awr_descriptionConfig.cmake"
+    "/home/yel-wishahy/ENPH_353_competition/build/2020_competition/adeept_awr/adeept_awr_description/catkin_generated/installspace/adeept_awr_descriptionConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/adeept_awr_description" TYPE FILE FILES "/home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/adeept_awr/adeept_awr_description/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/adeept_awr_description" TYPE FILE FILES "/home/yel-wishahy/ENPH_353_competition/src/2020_competition/adeept_awr/adeept_awr_description/package.xml")
 endif()
 

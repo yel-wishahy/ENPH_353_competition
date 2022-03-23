@@ -1,6 +1,6 @@
 # CMake generated Testfile for 
-# Source directory: /home/yel-wishahy/GitHub/ENPH_353_competition/src
-# Build directory: /home/yel-wishahy/GitHub/ENPH_353_competition/build
+# Source directory: /home/yel-wishahy/ENPH_353_competition/src
+# Build directory: /home/yel-wishahy/ENPH_353_competition/build
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.

@@ -1,8 +1,8 @@
-prefix=/home/yel-wishahy/GitHub/ENPH_353_competition/devel
+prefix=/home/yel-wishahy/ENPH_353_competition/devel
 
 Name: enph353_gazebo
 Description: Description of enph353_gazebo
 Version: 0.0.0
-Cflags: -I/home/yel-wishahy/GitHub/ENPH_353_competition/devel/include
+Cflags: -I/home/yel-wishahy/ENPH_353_competition/devel/include
 Libs: -L${prefix}/lib 
 Requires: roscpp gazebo_ros
