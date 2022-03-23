@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/adeept_awr_ros_driver_generate_messages_cpp"
-  "/home/yel-wishahy/GitHub/ENPH_353_competition/devel/include/adeept_awr_ros_driver/ArrayIR.h"
+  "/home/yel-wishahy/ENPH_353_competition/devel/include/adeept_awr_ros_driver/ArrayIR.h"
 )
 
 # Per-language clean rules from dependency scanning.

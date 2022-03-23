@@ -1,8 +1,8 @@
-# Install script for directory: /home/yel-wishahy/GitHub/ENPH_353_competition/src/test_controller
+# Install script for directory: /home/yel-wishahy/ENPH_353_competition/src/test_controller
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/yel-wishahy/GitHub/ENPH_353_competition/install")
+  set(CMAKE_INSTALL_PREFIX "/home/yel-wishahy/ENPH_353_competition/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/yel-wishahy/GitHub/ENPH_353_competition/build/test_controller/catkin_generated/installspace/test_controller.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/yel-wishahy/ENPH_353_competition/build/test_controller/catkin_generated/installspace/test_controller.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/test_controller/cmake" TYPE FILE FILES
-    "/home/yel-wishahy/GitHub/ENPH_353_competition/build/test_controller/catkin_generated/installspace/test_controllerConfig.cmake"
-    "/home/yel-wishahy/GitHub/ENPH_353_competition/build/test_controller/catkin_generated/installspace/test_controllerConfig-version.cmake"
+    "/home/yel-wishahy/ENPH_353_competition/build/test_controller/catkin_generated/installspace/test_controllerConfig.cmake"
+    "/home/yel-wishahy/ENPH_353_competition/build/test_controller/catkin_generated/installspace/test_controllerConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/test_controller" TYPE FILE FILES "/home/yel-wishahy/GitHub/ENPH_353_competition/src/test_controller/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/test_controller" TYPE FILE FILES "/home/yel-wishahy/ENPH_353_competition/src/test_controller/package.xml")
 endif()
 

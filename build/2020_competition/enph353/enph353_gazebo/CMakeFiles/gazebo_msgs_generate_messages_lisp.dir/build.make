@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/src
+CMAKE_SOURCE_DIR = /home/yel-wishahy/ENPH_353_competition/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/build
+CMAKE_BINARY_DIR = /home/yel-wishahy/ENPH_353_competition/build
 
 # Utility rule file for gazebo_msgs_generate_messages_lisp.
 
@@ -63,10 +63,10 @@ gazebo_msgs_generate_messages_lisp: 2020_competition/enph353/enph353_gazebo/CMak
 .PHONY : 2020_competition/enph353/enph353_gazebo/CMakeFiles/gazebo_msgs_generate_messages_lisp.dir/build
 
 2020_competition/enph353/enph353_gazebo/CMakeFiles/gazebo_msgs_generate_messages_lisp.dir/clean:
-	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo && $(CMAKE_COMMAND) -P CMakeFiles/gazebo_msgs_generate_messages_lisp.dir/cmake_clean.cmake
+	cd /home/yel-wishahy/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo && $(CMAKE_COMMAND) -P CMakeFiles/gazebo_msgs_generate_messages_lisp.dir/cmake_clean.cmake
 .PHONY : 2020_competition/enph353/enph353_gazebo/CMakeFiles/gazebo_msgs_generate_messages_lisp.dir/clean
 
 2020_competition/enph353/enph353_gazebo/CMakeFiles/gazebo_msgs_generate_messages_lisp.dir/depend:
-	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/GitHub/ENPH_353_competition/src /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo /home/yel-wishahy/GitHub/ENPH_353_competition/build /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo/CMakeFiles/gazebo_msgs_generate_messages_lisp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/yel-wishahy/ENPH_353_competition/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/ENPH_353_competition/src /home/yel-wishahy/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo /home/yel-wishahy/ENPH_353_competition/build /home/yel-wishahy/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo /home/yel-wishahy/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo/CMakeFiles/gazebo_msgs_generate_messages_lisp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : 2020_competition/enph353/enph353_gazebo/CMakeFiles/gazebo_msgs_generate_messages_lisp.dir/depend
 

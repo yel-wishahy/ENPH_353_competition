@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/src
+CMAKE_SOURCE_DIR = /home/yel-wishahy/ENPH_353_competition/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/yel-wishahy/GitHub/ENPH_353_competition/build
+CMAKE_BINARY_DIR = /home/yel-wishahy/ENPH_353_competition/build
 
 # Utility rule file for _catkin_empty_exported_target.
 
@@ -63,10 +63,10 @@ _catkin_empty_exported_target: 2020_competition/adeept_awr/adeept_awr/CMakeFiles
 .PHONY : 2020_competition/adeept_awr/adeept_awr/CMakeFiles/_catkin_empty_exported_target.dir/build
 
 2020_competition/adeept_awr/adeept_awr/CMakeFiles/_catkin_empty_exported_target.dir/clean:
-	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/adeept_awr/adeept_awr && $(CMAKE_COMMAND) -P CMakeFiles/_catkin_empty_exported_target.dir/cmake_clean.cmake
+	cd /home/yel-wishahy/ENPH_353_competition/build/2020_competition/adeept_awr/adeept_awr && $(CMAKE_COMMAND) -P CMakeFiles/_catkin_empty_exported_target.dir/cmake_clean.cmake
 .PHONY : 2020_competition/adeept_awr/adeept_awr/CMakeFiles/_catkin_empty_exported_target.dir/clean
 
 2020_competition/adeept_awr/adeept_awr/CMakeFiles/_catkin_empty_exported_target.dir/depend:
-	cd /home/yel-wishahy/GitHub/ENPH_353_competition/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/GitHub/ENPH_353_competition/src /home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/adeept_awr/adeept_awr /home/yel-wishahy/GitHub/ENPH_353_competition/build /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/adeept_awr/adeept_awr /home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/adeept_awr/adeept_awr/CMakeFiles/_catkin_empty_exported_target.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/yel-wishahy/ENPH_353_competition/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yel-wishahy/ENPH_353_competition/src /home/yel-wishahy/ENPH_353_competition/src/2020_competition/adeept_awr/adeept_awr /home/yel-wishahy/ENPH_353_competition/build /home/yel-wishahy/ENPH_353_competition/build/2020_competition/adeept_awr/adeept_awr /home/yel-wishahy/ENPH_353_competition/build/2020_competition/adeept_awr/adeept_awr/CMakeFiles/_catkin_empty_exported_target.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : 2020_competition/adeept_awr/adeept_awr/CMakeFiles/_catkin_empty_exported_target.dir/depend
 

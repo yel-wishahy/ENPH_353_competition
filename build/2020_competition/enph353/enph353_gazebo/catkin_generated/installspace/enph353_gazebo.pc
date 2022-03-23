@@ -1,4 +1,4 @@
-prefix=/home/yel-wishahy/GitHub/ENPH_353_competition/install
+prefix=/home/yel-wishahy/ENPH_353_competition/install
 
 Name: enph353_gazebo
 Description: Description of enph353_gazebo

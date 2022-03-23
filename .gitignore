@@ -1,4 +1,6 @@
 # vscode
+build/*
+devel/*
 .vscode
 .vscode/*
 !.vscode/settings.json

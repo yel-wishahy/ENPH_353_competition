@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "adeept_awr_description"
-PROJECT_SPACE_DIR = "/home/yel-wishahy/GitHub/ENPH_353_competition/install"
+PROJECT_SPACE_DIR = "/home/yel-wishahy/ENPH_353_competition/install"
 PROJECT_VERSION = "0.0.0"

@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo/src/collision_plugin.cpp" "/home/yel-wishahy/GitHub/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.o"
+  "/home/yel-wishahy/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo/src/collision_plugin.cpp" "/home/yel-wishahy/ENPH_353_competition/build/2020_competition/enph353/enph353_gazebo/CMakeFiles/collision_plugin.dir/src/collision_plugin.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -19,8 +19,8 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/home/yel-wishahy/GitHub/ENPH_353_competition/devel/include"
-  "/home/yel-wishahy/GitHub/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo/include"
+  "/home/yel-wishahy/ENPH_353_competition/devel/include"
+  "/home/yel-wishahy/ENPH_353_competition/src/2020_competition/enph353/enph353_gazebo/include"
   "/opt/ros/melodic/include"
   "/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
   "/usr/include/gazebo-9"
