@@ -34,7 +34,7 @@ Your file tree should look like this:
 
 <br />
 
-## Launching Controller Node <a name="launch"></a>
+## Launching Competition, Score Tracker, and Controller <a name="launch"></a>
 
 There is no ros launch file as of yet since this is a since node named **test_controller**. It subscribes to the raw camera feed at the topic: */R1/pi_camera/image_raw*, and publishes to the topic: */R1/cmd_vel* to move the robot.
 
@@ -45,7 +45,7 @@ Before launching the node:
 2. Launch competition world 
     * `cd ~/ENPH_353_competition/src/2020_competition/enph353/enph353_utils/scripts`
     * `./run_sim.sh -vpg`
-3. Launch score tracker (i don't really use this rn)
+3. Launch score tracker in the same directory with `./score_tracker.py`
 
 Launching the node takes one command if you've run `catkin_make` and sourced the correct file:
 
