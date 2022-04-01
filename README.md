@@ -12,10 +12,13 @@ ENPH 353 ML Project
 3. [Gazebo / Robot Settings](#settings)
 4. [Controller Settings](#controller_settings)
 
+## Collab Notebook
+
+[Computer Vision Test Notebook](https://colab.research.google.com/drive/1eKr42IbJgtu4PkAXP4f3kEiInMTaQDVN?usp=sharing)
 
 <br />
 
-## Setting up repo and ros ws <a name="setup"></a>
+# Setting up repo and ros ws <a name="setup"></a>
 
 **You can just clone this repo as it contains the latest competition package**
 
@@ -34,7 +37,7 @@ Your file tree should look like this:
 
 <br />
 
-## Launching Competition, Score Tracker, and Controller <a name="launch"></a>
+# Launching Controller Node <a name="launch"></a>
 
 There is no ros launch file as of yet since this is a since node named **test_controller**. It subscribes to the raw camera feed at the topic: */R1/pi_camera/image_raw*, and publishes to the topic: */R1/cmd_vel* to move the robot.
 
@@ -55,11 +58,11 @@ Launching the node takes one command if you've run `catkin_make` and sourced the
 
 <br />
 
-## Gazebo Settings <a name="settings"></a>
+# Gazebo Settings <a name="settings"></a>
 
 <br />
 
-### Changing realtime factor / simulation speed
+## Changing realtime factor / simulation speed
 
 The defualt simulation speed is ~2.5 realtime factor, to control realtime factor we change `real_time_update_rate`. The robot is much more stable at slower sim speeds!
 
@@ -80,7 +83,7 @@ In the file at `/2020_competition/enph353/enph353_gazebo/worlds/353.world` go to
 
 <br />
 
-### Changing Robot Start Location and Resetting Location
+## Changing Robot Start Location and Resetting Location
 
 For some testing cases , I found it useful to start the robot off in a specific position istead of manually having to move it every time. This is useful especially since our controller is in the early stages of development and doesn't work well in some areas of the world simulation.
 
@@ -112,5 +115,5 @@ In this file you'll find the section:
 
 <br />
 
-## robot_driver.py <a name="controller_settings"></a>
+# robot_driver.py <a name="controller_settings"></a>
 If `DEBUG=true` at the top of the file, pid error values and camera feed will be displayed.
