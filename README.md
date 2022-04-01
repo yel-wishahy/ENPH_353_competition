@@ -1,7 +1,7 @@
-# ENPH_353_competition - test_controller
+# ENPH_353_competition - time_trials
 ENPH 353 ML Project 
 
-**Repo:**  test_controller
+**Repo:**  time_trials
 **Description:** This repo contains a ros package that test controller for time trials that controls the robot in the enph-353 gazebo environment. 
 
 **Author(s):** Yousif El-Wishahy
@@ -48,7 +48,7 @@ Before launching the node:
 2. Launch competition world 
     * `cd ~/ENPH_353_competition/src/2020_competition/enph353/enph353_utils/scripts`
     * `./run_sim.sh -vpg`
-3. Launch score tracker (i don't really use this rn)
+3. Launch score tracker in the same directory with `./score_tracker.py`
 
 Launching the node takes one command if you've run `catkin_make` and sourced the correct file:
 

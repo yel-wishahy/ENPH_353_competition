@@ -4,6 +4,8 @@ from queue import Queue
 from geometry_msgs.msg import Twist
 import rospy
 import cv2
+import imutils
+import pytesseract
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
@@ -118,13 +120,48 @@ class image_processor:
         _,contours,_ = cv2.findContours(mask.copy(), 1, cv2.CHAIN_APPROX_SIMPLE)
 
         return sorted(contours,key=cv2.contourArea,reverse=True)
+    
+    def get_plates(self,image,gray):
+        edged = cv2.Canny(gray, 30, 200) 
+        contours = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours = imutils.grab_contours(contours)
+        contours = sorted(contours, key = cv2.contourArea, reverse = True)[:10]
+        screenCnt = None
 
+        for c in contours:
+            
+            peri = cv2.arcLength(c, True)
+            approx = cv2.approxPolyDP(c, 0.018 * peri, True)
+         
+            if len(approx) == 4:
+                screenCnt = approx
+                break
+
+        if screenCnt is None:
+            detected = 0
+            print ("No contour detected")
+        else:
+             detected = 1
+
+        if detected == 1:
+            cv2.drawContours(img, [screenCnt], -1, (0, 0, 255), 3)
+
+        mask = np.zeros(gray.shape,np.uint8)
+        new_image = cv2.drawContours(mask,[screenCnt],0,255,-1,)
+        new_image = cv2.bitwise_and(img,img,mask=mask)
+
+        (x, y) = np.where(mask == 255)
+        (topx, topy) = (np.min(x), np.min(y))
+        (bottomx, bottomy) = (np.max(x), np.max(y))
+        Cropped = gray[topx:bottomx+1, topy:bottomy+1]
+
+        return Cropped
+      
 class State(Enum):
     DRIVE_FORWARD = 1
     TURN = 2
     APPROACHING_PARKING = 3
     READ_PARKING = 4
-    
 
 class PID_controller():
     def __init__(self):
