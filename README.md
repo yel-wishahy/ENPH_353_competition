@@ -11,6 +11,7 @@ ENPH 353 ML Project
 2. [Launch Gazebo Sim](#launch)
 3. [Gazebo / Robot Settings](#settings)
 4. [Controller Settings](#controller_settings)
+5. [Debug View](#debug_view)
 
 ## Collab Notebook
 
@@ -37,24 +38,28 @@ Your file tree should look like this:
 
 <br />
 
-# Launching Controller Node <a name="launch"></a>
+# Launching Controller and Debug Nodes <a name="launch"></a>
 
-There is no ros launch file as of yet since this is a since node named **test_controller**. It subscribes to the raw camera feed at the topic: */R1/pi_camera/image_raw*, and publishes to the topic: */R1/cmd_vel* to move the robot.
+There is a launch file called `test_controller.launch` in the package that launches all the required nodes! If you only want to run the main controller you can scipt to the [Launching Nodes Individually](#launching_individually") section.
 
-Before launching the node:
+## Important: Before Lauching the Node/Launchfile
 
-1. Source competition setup.bash file 
+1. Setup workspace with catkin_make and source competition setup.bash file 
     * If you follow the doc it should be `source ~/ENPH_353_competition/devel/setup.bash`
 2. Launch competition world 
     * `cd ~/ENPH_353_competition/src/2020_competition/enph353/enph353_utils/scripts`
     * `./run_sim.sh -vpg`
-3. Launch score tracker (i don't really use this rn)
+3. Launch score tracker
+    * `./score_tracker.py`
 
-Launching the node takes one command if you've run `catkin_make` and sourced the correct file:
+## Launch with launch file
 
-4. command:   `rosrun test_controller robot_driver.py`
+Command: `roslaunch test_controller test_controller.launch`
 
+## Launching Nodes Individually <a name="launching_individually"></a>
 
+* Command:   `rosrun test_controller robot_driver.py`
+* Command:   `rosrun test_controller debug_show.py`
 
 <br />
 
@@ -116,4 +121,7 @@ In this file you'll find the section:
 <br />
 
 # robot_driver.py <a name="controller_settings"></a>
-If `DEBUG=true` at the top of the file, pid error values and camera feed will be displayed.
+If `DEBUG=True` at the top of the file, more error messages and labelled camera feed will be published.
+
+# debug_show.py <a name="debug_view"></a>
+This ros node subscribes to main controller debug topics to receive pid error values and labelled camera feed. This is a seperate node to ensure the pid control loop can run as fast as possible (in a seperate thread) without needing to do 'wasteful' side tasks like showing debug info/error values. 
