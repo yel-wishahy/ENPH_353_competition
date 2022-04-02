@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-from queue import Queue
 
+from queue import Queue
 from geometry_msgs.msg import Twist
 import rospy
 import cv2
-from std_msgs.msg import String
+from std_msgs.msg import String,Float32MultiArray
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
@@ -14,7 +14,6 @@ import matplotlib.animation as animation
 from multiprocessing import Pool
 from multiprocessing import Process
 from enum import Enum
-
 import time
 
 #controller node name
@@ -24,18 +23,29 @@ camera_feed_topic = "/R1/pi_camera/image_raw"
 cmd_vel_topic = "/R1/cmd_vel"
 license_plate_topic = "/license_plate"
 
-#debug /tune mode
-DEBUG = False
+#internal debug publisher topics
+debug_img_topic = "/test_controller/image"
+debug_err_topic = "/test_controller/error"
 
-#pid parameters
+#debug /tune mode
+DEBUG = True
+
+#pid driving controller parameters
+
+DRIVE_SPEED = 0.2
+
 K_P = 2.5
 K_D = 1.75
 K_I = 3
 
-PID_FREQUENCY = 5 #250 #hz
+PID_FREQUENCY = 500 #250 #hz
 MAX_ERROR = 20
 G_MULTIPLIER = 0.05
 ERROR_HISTORY_LENGTH = 5 #array size
+
+#stopping parameters
+STOP_PROXIMITY_THRESHOLD =550
+STOP_DURATION = 2 #seconds
 
 
 
@@ -48,6 +58,8 @@ def main():
     while not rospy.is_shutdown():
         controller.control_loop()
         rate.sleep()
+
+    controller.stop_cmd()
 
 
 
@@ -119,21 +131,28 @@ class image_processor:
 
         return sorted(contours,key=cv2.contourArea,reverse=True)
 
-class State(Enum):
+class DriveState(Enum):
     DRIVE_FORWARD = 1
     TURN = 2
-    APPROACHING_PARKING = 3
-    READ_PARKING = 4
-    
+    STOPPING = 3
+    STOPPED = 4
+    CROSSING = 5
+    FINISHED_CROSSING = 6
+    READ_PARKING = 7
 
 class PID_controller():
     def __init__(self):
         self.road_clr = [85,85,85]
         self.border_clr = [0,0,0]
-        self.stop_clr  = [254,0,0]
+        self.stop_clr  = [0,0,255]
+        self.parking_clr = [100,0,0]#[200,100,100]#[121,19,20]
         
         self.drive_pub = rospy.Publisher(cmd_vel_topic, Twist, queue_size=1)
         self.license_plate_pub = rospy.Publisher(license_plate_topic, String, queue_size=1)
+
+        self.debug_error_pub = rospy.Publisher(debug_err_topic, Float32MultiArray, queue_size=10)
+        self.debug_img_pub = rospy.Publisher(debug_img_topic, Image, queue_size=10)
+
         self.img_processor = image_processor()
 
         self.last_error = 0
@@ -145,10 +164,12 @@ class PID_controller():
         self.index = 0
 
         self.move_state = 0
+        self.last_stop_time = 0
+        self.last_stop_detect = False
 
         #Setting an arbitrary state to start timer at
         self.state = 1
-        self.drive_state = State.DRIVE_FORWARD
+        self.drive_state = DriveState.DRIVE_FORWARD
         time.sleep(1)
 
 
@@ -175,34 +196,71 @@ class PID_controller():
 
         if(self.img_processor.empty is False):
             image = self.img_processor.latest_img
+            move = Twist()
+            image_debug = image
 
-            # error = self.get_error_off_path(image)
-            # error = self.get_error_border(image)
-            # error,image_contour = self.get_error_border_contour(image)
-            error,image_contour = self.get_error_path(image)
-            self.detect_stop(image)
+            #process images for robot state
+            error,image_debug = self.get_error_path(image)
+            detected_stop, image_debug = self.detect_stop(image_debug)
+            detected_parking, image_debug = self.detect_parking_bin(image_debug)
 
-            g = self.calculate_pid(error)
-            move = self.get_move_cmd(g)
-            self.drive_pub.publish(move)
+            if(detected_stop or detected_parking):
+                if(self.drive_state == DriveState.DRIVE_FORWARD):
+                    self.drive_state = DriveState.STOPPING
+                elif(self.drive_state == DriveState.CROSSING and not self.last_stop_detect):
+                    self.drive_state = DriveState.FINISHED_CROSSING
+            else:
+                if(self.drive_state == DriveState.FINISHED_CROSSING):
+                    self.drive_state = DriveState.DRIVE_FORWARD
+        
 
-            
-            if(DEBUG):
-                self.plot_error()
-                #show image with path estimation
-                cv2.imshow("Image window", image_contour)
-                cv2.waitKey(1)
+            if(self.drive_state == DriveState.DRIVE_FORWARD):
+                g = self.calculate_pid(error)
+                move = self.get_move_cmd(g)
+
+            if(self.drive_state == DriveState.STOPPING):
+                self.last_stop_time = rospy.get_time()
+                move.linear.x = 0
+                move.angular.z = 0
+                self.drive_state = DriveState.STOPPED
+
+            if(self.drive_state == DriveState.STOPPED):
+                if(rospy.get_time() >= self.last_stop_time + STOP_DURATION):
+                    self.drive_state = DriveState.CROSSING
+                else:
+                    move.linear.x = 0
+                    move.angular.z = 0
+
+            if(self.drive_state == DriveState.CROSSING or self.drive_state == DriveState.FINISHED_CROSSING):
+                g = self.calculate_pid(error)
+                move = self.get_move_cmd(g,1.5*DRIVE_SPEED)
+
+
             self.img_processor.empty = True
+            self.last_stop_detect = detected_stop
+
+            print("STATE: " ,self.drive_state)
+
+            #publish error and image to debug topics
+            err_pt = Float32MultiArray()
+            err_pt.data = [float(error),rospy.get_time()]
+            debug_img = Image()
+            debug_img = self.img_processor.bridge.cv2_to_imgmsg(image_debug)
+            self.debug_error_pub.publish(err_pt)
+            self.debug_img_pub.publish(debug_img)
+
+            #publish move command to robot
+            self.drive_pub.publish(move)
 
 
     #get move command based on p+i+d= g
     #g only impacts angular.z
     #for now linear.x is constant
-    def get_move_cmd(self,g):
+    def get_move_cmd(self,g,x_speed=DRIVE_SPEED):
         move = Twist()
 
         move.angular.z = g * G_MULTIPLIER
-        move.linear.x = 0.2 #np.interp(np.abs(move.angular.z), [1,0], LINEAR_SPEED_RANGE)
+        move.linear.x =  x_speed #np.interp(np.abs(move.angular.z), [1,0], LINEAR_SPEED_RANGE)
 
         print('g', g)
         print('z', move.angular.z)
@@ -210,13 +268,14 @@ class PID_controller():
 
         return move
 
-    #plots xerror array vs. time array, to help with tuning
-    def plot_error(self):
-        plt.clf()
-        plt.ylim((-1*MAX_ERROR,MAX_ERROR))
-        plt.plot(self.time_array[:-1],self.error_array[:-1])
-        plt.pause(0.000000001)
-        
+    #stop command
+    def stop_cmd(self):
+        move = Twist()
+        move.angular.z = 0
+        move.linear.x = 0
+        self.drive_pub.publish(move)
+
+
     #calculate pid : proportionality, integration and derivative values
     #tries to do a better job by using numpy trapezoidal integration as well as numpy gradient
     #uses error arrays for integration
@@ -247,15 +306,46 @@ class PID_controller():
         return g
     
     def detect_stop(self,image):
+        detected = False
         Y,X = np.where(np.all(image==self.stop_clr,axis=2))
 
         if X.size > 0 and Y.size > 0:
-            cy=int(np.average(Y))
+            cx= int(np.average(X))
+            cy= int(np.average(Y))
 
-            if(cy >= image.shape[0]/2):
+            if(DEBUG):
+                print('detect avg red')
+                cv2.line(image,(cx,0),(cx,720),(0,0,255),1)
+                cv2.line(image,(0,cy),(1280,cy),(0,0,255),1)
+
+            if(cy >= STOP_PROXIMITY_THRESHOLD):
+                detected = True
                 print('*****************************************')
                 print('****************At Stop************')
                 print('*****************************************')
+                self.img_processor.save_image()
+        return detected,image
+    
+    def detect_parking_bin(self,image):
+        detected = False
+        Y,X = np.where(np.all(image==self.parking_clr,axis=2))
+
+        if X.size > 0 and Y.size > 0:
+            cx= int(np.average(X))
+            cy=int(np.average(Y))
+
+            if(DEBUG):
+                print('detect avg blue')
+                cv2.line(image,(cx,0),(cx,720),(0,255,0),1)
+                cv2.line(image,(0,cy),(1280,cy),(0,255,0),1)
+
+            if(cx <= image.shape[1]/2 and cy >= image.shape[0]/2):
+                detected = True
+                print('*****************************************')
+                print('****************At Bin************')
+                print('*****************************************')
+                self.img_processor.save_image()
+        return detected, image
 
 
     
@@ -276,8 +366,6 @@ class PID_controller():
 
         if X.size > 0 and Y.size > 0 :
             pt_path = np.array([int(np.average(X)),int(np.average(Y))])
-
-            self.drive_state = State.DRIVE_FORWARD
 
             displacement = pt_robot - pt_path
 
@@ -379,7 +467,6 @@ class PID_controller():
             # else:    
                 # path centre relative to white lanes/ borders
             if(0.6*cv2.contourArea(contours_w[0]) >= cv2.contourArea(contours_w[1])):
-                self.drive_state = State.TURN
                 print('*****************************************')
                 print('****************TURNING************')
                 print('*****************************************')
@@ -388,7 +475,6 @@ class PID_controller():
                 else:
                     xerror = MAX_ERROR
             else:
-                self.drive_state = State.DRIVE_FORWARD
                 pt_path = pts_w[0] + (pts_w[1] - pts_w[0])/2
 
                 displacement = pt_robot - pt_path
