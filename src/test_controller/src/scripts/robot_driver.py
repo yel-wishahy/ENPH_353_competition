@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from queue import Queue
 from geometry_msgs.msg import Twist
 import rospy
 import cv2
@@ -7,6 +8,11 @@ from std_msgs.msg import String,Float32MultiArray
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
+import matplotlib.pyplot as plt
+from threading import Thread
+import matplotlib.animation as animation
+from multiprocessing import Pool
+from multiprocessing import Process
 from enum import Enum
 import time
 
@@ -32,7 +38,7 @@ K_P = 2.5
 K_D = 1.75
 K_I = 3
 
-FREQUENCY = 500 #250 #hz
+FREQUENCY = 250 # #hz
 MAX_ERROR = 20
 G_MULTIPLIER = 0.05
 ERROR_HISTORY_LENGTH = 5 #array size
@@ -71,7 +77,6 @@ class image_processor:
         try:
             self.frameCount = self.frameCount + 1
             self.latest_img = self.bridge.imgmsg_to_cv2(img, "bgr8")
-            # self.save_image()
             if(self.img_area == 0):
                 self.img_area = self.latest_img.shape[0]*self.latest_img.shape[1]
             self.empty = False
@@ -192,11 +197,13 @@ class PID_controller():
             image = self.img_processor.latest_img
             move = Twist()
             image_debug = image
+            detected_stop = False
+            detected_parking = False
 
             #process images for robot state
             error,image_debug = self.get_error_path(image)
-            detected_stop, image_debug = self.detect_stop(image_debug)
-            detected_parking, image_debug = self.detect_parking_bin(image_debug)
+            # detected_stop, image_debug = self.detect_stop(image_debug)
+            # detected_parking, image_debug = self.detect_parking_bin(image_debug)
 
             if(detected_stop or detected_parking):
                 if(self.drive_state == DriveState.DRIVE_FORWARD):

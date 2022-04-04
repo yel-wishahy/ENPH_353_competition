@@ -1,4 +1,8 @@
 <launch>
   <node name="robot_driver" pkg="test_controller" type="robot_driver.py"  respawn="false" output="screen"/>
+  
   <node name="debug_show" pkg="test_controller" type="debug_show.py"  respawn="false" output="screen"/>
+
+  <node name="license_detector" pkg="test_controller" type="license_detector.py"  respawn="false" output="screen"/>
+
 </launch>

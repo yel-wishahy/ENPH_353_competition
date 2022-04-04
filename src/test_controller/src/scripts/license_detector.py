@@ -3,12 +3,13 @@
 import cv2
 import numpy as np
 import rospy
-from PIL import Image
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-from robot_driver import camera_feed_topic, FREQUENCY
 
+camera_feed_topic = "/R1/pi_camera/image_raw"
 node = 'license_plate_detector'
+
+FREQUENCY = 250
 
 def main():
     rospy.init_node(node)
@@ -73,7 +74,7 @@ def contour(img,inv_thresh=255,limit=10,num_sides=-1,area_limit=1,raw=False,debu
         mask = cv2.dilate(mask, None, iterations=2)
 
     # Find the contours of the frame
-    contours,hierarchy = cv2.findContours(mask.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    _,contours,_ = cv2.findContours(mask.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     c_out = []
 
     # Find the biggest contour (if detected)
@@ -203,7 +204,7 @@ def find_license_plate_contours(image,limit=10):
     # find contours in the thresholded image and sort them by
     # their size in descending order, keeping only the largest
     # ones
-    cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
+    _,cnts,_ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
     cv2.CHAIN_APPROX_SIMPLE)
     cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:limit]
 
@@ -259,6 +260,12 @@ class LicenseDetector:
             crops = get_license_plate_crop(crop,cnts,y_limits=(20,20))
 
             for c in crops:
+                try:
+                    cv2.imshow("Debug View", c)
+                    cv2.waitKey(1)
+                except:
+                    print('could not imshow')
+
                 self.count = self.count + 1
                 self.save_image(c)
 
@@ -267,11 +274,11 @@ class LicenseDetector:
 
     def save_image(self,img=None):
         output = self.latest_img
-        if(img != None):
+        if(img is not None):
             output = img
 
-        cv2.imwrite('imgs/img_'+str(self.frameCount)+'.jpg',output)
-        print('SAVED POTENTIAL LICENSE:','license_crop_',self.frameCount)
+        cv2.imwrite('imgs/img_'+str(self.count)+'.jpg',output)
+        print('SAVED POTENTIAL LICENSE:','license_crop_',self.count)
 
 main()
 
