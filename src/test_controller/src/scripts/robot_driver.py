@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from queue import Queue
 from geometry_msgs.msg import Twist
 import rospy
 import cv2
@@ -8,11 +7,6 @@ from std_msgs.msg import String,Float32MultiArray
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
-import matplotlib.pyplot as plt
-from threading import Thread
-import matplotlib.animation as animation
-from multiprocessing import Pool
-from multiprocessing import Process
 from enum import Enum
 import time
 
@@ -38,7 +32,7 @@ K_P = 2.5
 K_D = 1.75
 K_I = 3
 
-PID_FREQUENCY = 500 #250 #hz
+FREQUENCY = 500 #250 #hz
 MAX_ERROR = 20
 G_MULTIPLIER = 0.05
 ERROR_HISTORY_LENGTH = 5 #array size
@@ -53,7 +47,7 @@ STOP_DURATION = 2 #seconds
 def main():
     rospy.init_node(controller_node)
     controller = PID_controller()
-    rate = rospy.Rate(PID_FREQUENCY)
+    rate = rospy.Rate(FREQUENCY)
 
     while not rospy.is_shutdown():
         controller.control_loop()

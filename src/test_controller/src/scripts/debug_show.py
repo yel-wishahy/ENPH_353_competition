@@ -7,15 +7,10 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 import matplotlib.pyplot as plt
+import robot_driver 
 
 debug_node = "test_controller_debug"
-FREQ = 250
 
-debug_img_topic = "/test_controller/image"
-debug_err_topic = "/test_controller/error"
-
-MAX_ERROR = 20
-ERROR_HISTORY_LENGTH = 5 #array size
 
 def main():
     print('init node')
@@ -23,7 +18,7 @@ def main():
 
     debug = Debug()
 
-    rate = rospy.Rate(FREQ)
+    rate = rospy.Rate(robot_driver.FREQUENCY)
 
     while not rospy.is_shutdown():
         debug.plot_err()
@@ -32,8 +27,8 @@ def main():
 
 class Debug():
     def __init__(self):
-        self.img_sub = rospy.Subscriber(debug_img_topic,Image,self.img_callback,queue_size=1)
-        self.err_sub = rospy.Subscriber(debug_err_topic,Float32MultiArray,self.err_callback,queue_size=1)
+        self.img_sub = rospy.Subscriber(robot_driver.debug_img_topic,Image,self.img_callback,queue_size=1)
+        self.err_sub = rospy.Subscriber(robot_driver.debug_err_topic,Float32MultiArray,self.err_callback,queue_size=1)
 
         self.bridge = CvBridge()
         self.latest_img = Image()
@@ -41,8 +36,8 @@ class Debug():
 
 
         self.index = 0
-        self.time_array = np.ones(ERROR_HISTORY_LENGTH)*1e-5
-        self.error_array = np.ones(ERROR_HISTORY_LENGTH)*1e-5
+        self.time_array = np.ones(robot_driver.ERROR_HISTORY_LENGTH)*1e-5
+        self.error_array = np.ones(robot_driver.ERROR_HISTORY_LENGTH)*1e-5
     
     def img_callback(self,img):
         try:
@@ -63,7 +58,7 @@ class Debug():
 
     def plot_err(self):
         plt.clf()
-        plt.ylim((-1*MAX_ERROR,MAX_ERROR))
+        plt.ylim((-1*robot_driver.MAX_ERROR,robot_driver.MAX_ERROR))
         plt.plot(self.time_array[:-1],self.error_array[:-1])
         plt.pause(0.000000001)
 
