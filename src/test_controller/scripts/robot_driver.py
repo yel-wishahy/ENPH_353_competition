@@ -32,7 +32,7 @@ DEBUG = True
 
 #pid driving controller parameters
 
-DRIVE_SPEED = 0.2
+DRIVE_SPEED = 0.15
 
 K_P = 2.5
 K_D = 1.75
@@ -80,6 +80,7 @@ class image_processor:
             if(self.img_area == 0):
                 self.img_area = self.latest_img.shape[0]*self.latest_img.shape[1]
             self.empty = False
+            # self.save_image()
         except CvBridgeError as e:
             print(e)
 
