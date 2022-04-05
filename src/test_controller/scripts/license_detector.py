@@ -5,6 +5,14 @@ import numpy as np
 import rospy
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
+import roslib
+import os
+from importlib_resources import files
+import copy
+
+PKG = 'test_controller'
+roslib.load_manifest(PKG)
+dir_path = roslib.packages.get_pkg_dir(PKG)
 
 camera_feed_topic = "/R1/pi_camera/image_raw"
 node = 'license_plate_detector'
@@ -123,7 +131,7 @@ def get_license_bin_crop(img):
     inv = (87-img) #inverse threshold to make plate area white is 87 usually (found by testing)
 
     #contour white with area limit 0.2
-    _,c_out = contour(inv,limit=3,area_limit=0.1)#num_sides=4
+    _,c_out = contour(inv,limit=3,area_limit=0.1)
 
     crop = img.copy()
     xmin,xmax,ymin,ymax = 0,0,0,0
@@ -227,6 +235,7 @@ def get_license_plate_crop(img,cnts,y_limits=(10,10)):
   @param img: opencv image with license plate
   @param cnts: list of conoute (ndarray of 2d pts)
   @param y_limits, optional: tuple of limits to crop (above,below) centroid
+  @param template : cv image, optional, template to compare against
 
   @return list of cropped images that could contain license plates
   """
@@ -239,6 +248,42 @@ def get_license_plate_crop(img,cnts,y_limits=(10,10)):
   
   return crops
 
+def compare_template(img,template,match_threshold = 0.15):
+    """
+    @brief uses cv2.matchTemplate to compare image to reference image
+
+    @param img : cv2 image to check
+    @param templaate : cv2 image template to compare against
+    @param optional match_threshold, float to dictate minimum match success
+
+    @return bool: similar , float: match similarity
+    """
+
+    # if(img is None or template is None or 
+    # img.shape[0] < 1 or img.shape[1] < 1 or 
+    # template.shape[0] < 1 or template.shape[1] < 1):
+    #     return False,0
+
+    gray = cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_BGR2GRAY)
+    binary = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,15,3)
+
+    binary = cv2.resize(binary, (template.shape[1],template.shape[0]))
+    similarity = cv2.matchTemplate(binary,template,cv2.TM_CCOEFF_NORMED)
+    result = similarity > match_threshold
+
+    return result, similarity
+
+def clean_crops(crops):
+    """
+    @brief makes sure the list of cropped images has valid images that arent over cropped
+    @return new list with only valid crops
+    """
+    out_list = []
+    for c in crops:
+        if(c.shape[0] > 0 and c.shape[1] > 0):
+            out_list.append(c)
+    
+    return out_list
 
 class LicenseDetector:
     def __init__(self):
@@ -248,36 +293,54 @@ class LicenseDetector:
         self.latest_img = Image()
         self.empty = True
         self.count = 0
+        # self.template = cv2.imread(os.path.join(dir_path, "/src/data/template.jpg"))
+        self.template = cv2.imread('template.jpg', cv2.IMREAD_UNCHANGED)
+        self.save_image(self.template,'test.jpg')
     
     #subscriber callback that receives latest image from camera feed
     def license_callback(self, img):
-        try:
             self.latest_img = self.bridge.imgmsg_to_cv2(img, "bgr8")
             self.empty = False
 
             crop,_ = get_license_bin_crop(self.latest_img)
-            cnts,_ = find_license_plate_contours(crop)
-            crops = get_license_plate_crop(crop,cnts,y_limits=(20,20))
+            cnts = None
 
+            try:
+                cnts,_ = find_license_plate_contours(crop)
+            except:
+                return
+
+            crops= get_license_plate_crop(crop,cnts,y_limits=(20,20))
+            crops = clean_crops(crops)
+
+            result = False
             for c in crops:
-                try:
-                    cv2.imshow("Debug View", c)
+                res,_= compare_template(c,self.template,match_threshold = 0.2)
+                if(res):
+                    result = True
+                    break
+
+            if(result):
+                for c in crops:
+                    print('*****************')
+                    print('***FOUND MATCH***')
+                    print('*****************')
+                    cv2.imshow("Debug View",c)
                     cv2.waitKey(1)
-                except:
-                    print('could not imshow')
+                    # self.count = self.count + 1
+                    # self.save_image(c)
 
-                self.count = self.count + 1
-                self.save_image(c)
 
-        except CvBridgeError as e:
-            print(e)
 
-    def save_image(self,img=None):
+    def save_image(self,img=None,filename=None):
         output = self.latest_img
+        name = 'img_'+str(self.count)+'.jpg'
         if(img is not None):
             output = img
+        if(filename is not None):
+            name = filename
 
-        cv2.imwrite('imgs/img_'+str(self.count)+'.jpg',output)
+        cv2.imwrite('imgs/'+name,output)
         print('SAVED POTENTIAL LICENSE:','license_crop_',self.count)
 
 main()
