@@ -9,9 +9,10 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import roslib
 import os
-from importlib_resources import files
+import imutils
 import copy
 from queue import Queue
+from cnn_tester import CharacterDetector, input_size
 
 PKG = 'test_controller'
 roslib.load_manifest(PKG)
@@ -399,6 +400,8 @@ def crop_license_letters(img):
         if(i==3):
             continue
         c = img[:,xmin + (i-1)*dx:xmin+i*dx]
+
+        c = cv2.resize(c, (input_size[1],input_size[0]))
         crops.append(c)
 
     return crops
@@ -417,6 +420,8 @@ class LicenseDetector:
         self.save_image(self.template,'test.jpg')
         self.queue = Queue()
         self.empty = True
+        
+        self.CR = CharacterDetector()
     
     #subscriber callback that receives latest image from camera feed
     def license_callback(self, img):
@@ -452,13 +457,20 @@ class LicenseDetector:
                 cv2.imshow("Debug View",plate)
                 cv2.waitKey(1)
 
-                self.count = self.count + 1
-                self.save_image(plate)
-
                 crops = crop_license_letters(plate)
-                for i in range(len(crops)):
-                    name = 'plate_' + str(self.count) + '_letter_' + str(i) + '.jpg'
-                    self.save_image(crops[i],name)
+
+                prediction = self.CR.predict_image(np.array(crops))
+                print(prediction)
+                for p in prediction:
+                    print(np.argmax(p))
+
+                # print(predict_image(image_array))
+                # print(np.argmax(predict_image(image_array)))
+                # self.count = self.count + 1
+                # self.save_image(plate)
+                # for i in range(len(crops)):
+                #     name = 'plate_' + str(self.count) + '_letter_' + str(i) + '.jpg'
+                #     self.save_image(crops[i],name)
 
     def save_image(self,img=None,filename=None):
         output = self.latest_img
