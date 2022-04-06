@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import queue
-import re
 import cv2
 import numpy as np
 import rospy
@@ -13,6 +12,8 @@ import imutils
 import copy
 from queue import Queue
 from cnn_tester import CharacterDetector, input_size
+import string
+
 
 PKG = 'test_controller'
 roslib.load_manifest(PKG)
@@ -22,6 +23,8 @@ camera_feed_topic = "/R1/pi_camera/image_raw"
 node = 'license_plate_detector'
 
 FREQUENCY = 1000
+
+chars = string.ascii_uppercase + string.digits
 
 def main():
     rospy.init_node(node)
@@ -462,7 +465,9 @@ class LicenseDetector:
                 prediction = self.CR.predict_image(np.array(crops))
                 print(prediction)
                 for p in prediction:
-                    print(np.argmax(p))
+                    argmax = np.argmax(p)
+                    char = chars[argmax]
+                    print(argmax,char)
 
                 # print(predict_image(image_array))
                 # print(np.argmax(predict_image(image_array)))
