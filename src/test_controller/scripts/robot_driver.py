@@ -15,6 +15,7 @@ from multiprocessing import Pool
 from multiprocessing import Process
 from enum import Enum
 import time
+import imutils
 
 #controller node name
 controller_node = "test_controller"
@@ -130,6 +131,31 @@ class image_processor:
         _,contours,_ = cv2.findContours(mask.copy(), 1, cv2.CHAIN_APPROX_SIMPLE)
 
         return sorted(contours,key=cv2.contourArea,reverse=True)
+    
+    def get_plates(self,image,gray):
+        edged = cv2.Canny(gray, 30, 200) 
+        contours = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours = imutils.grab_contours(contours)
+        contours = sorted(contours, key = cv2.contourArea, reverse = True)[:10]
+        screenCnt = None
+
+        for c in contours:
+            
+            peri = cv2.arcLength(c, True)
+            approx = cv2.approxPolyDP(c, 0.018 * peri, True)
+         
+            if len(approx) == 4:
+                screenCnt = approx
+                break
+
+        if screenCnt is None:
+            detected = 0
+            print ("No contour detected")
+        else:
+             detected = 1
+
+        if detected == 1:
+            cv2.drawContours(image, [screenCnt], -1, (0, 0, 255), 3)
 
 class DriveState(Enum):
     DRIVE_FORWARD = 1
