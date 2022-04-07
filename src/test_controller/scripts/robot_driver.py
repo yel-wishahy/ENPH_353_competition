@@ -33,11 +33,11 @@ DEBUG = True
 
 #pid driving controller parameters
 
-DRIVE_SPEED = 0.15
+DRIVE_SPEED = 0.2
 
-K_P = 2.5
-K_D = 1.75
-K_I = 3
+K_P = 8#3.5
+K_D = 0.5#2.5
+K_I = 0#3
 
 FREQUENCY = 250 # #hz
 MAX_ERROR = 20

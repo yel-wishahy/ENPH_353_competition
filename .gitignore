@@ -8,6 +8,8 @@ devel/*
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+id_imgs/*
+license_imgs/*
 
 # Local History for Visual Studio Code
 .history/

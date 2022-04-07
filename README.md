@@ -124,3 +124,5 @@ If `DEBUG=True` at the top of the file, more error messages and labelled camera 
 
 # debug_show.py <a name="debug_view"></a>
 This ros node subscribes to main controller debug topics to receive pid error values and labelled camera feed. This is a seperate node to ensure the pid control loop can run as fast as possible (in a seperate thread) without needing to do 'wasteful' side tasks like showing debug info/error values. 
+
+

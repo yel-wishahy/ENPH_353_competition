@@ -1,3 +1,4 @@
+from enum import Enum
 import tensorflow as tf
 from tensorflow.keras import models
 from tensorflow.python.keras.backend import set_session
@@ -8,11 +9,23 @@ import os
 
 abs_path = os.path.abspath('/home/yel-wishahy/ENPH_353_competition/src/test_controller')
 
-# model_name = "my_model_V3.h5"
-# input_size = (298, 150,1) #h,w, #clr Channels
+class PreProcessMode(Enum):
+	NONE = 0
+	GRAY = 1
+	BINARY = 2
 
-model_name = "my_model_V13.h5"
-input_size = (200,100,1) #h,w,#clr channels
+
+# model_name = "my_model_V3.h5"
+# input_size = (298, 150,3) #h,w, #clr Channels
+# pre_process_mode = PreProcessMode.NONE
+
+# model_name = "my_model_V13.h5"
+# input_size = (200,100,1) #h,w,#clr channels
+#pre_process_mode = PreProcessMode.BINARY
+
+model_name = "my_model_V15.h5"
+INPUT_SIZE = (100,100,1) #h,w, #clr Channels
+PRE_PROCESS_MODE = PreProcessMode.BINARY
 
 
 model_path = abs_path + '/models/' + model_name
@@ -32,3 +45,7 @@ class CharacterDetector():
 
 		return NN_prediction
 	
+
+
+
+
