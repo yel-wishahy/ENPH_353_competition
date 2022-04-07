@@ -55,10 +55,17 @@ def main():
     rospy.init_node(controller_node)
     controller = PID_controller()
     rate = rospy.Rate(FREQUENCY)
+    start_time = rospy.get_time()
 
-    while not rospy.is_shutdown():
+    controller.license_plate_pub.publish(String("Team1,pass,0,AAAA"))
+    end_time = start_time + 60*5
+
+    while not rospy.is_shutdown() and rospy.get_time() < end_time:
         controller.control_loop()
         rate.sleep()
+
+    controller.license_plate_pub.publish(String("Team1,pass,-1,AAAA"))
+
 
     controller.stop_cmd()
 
@@ -201,6 +208,7 @@ class PID_controller():
 
     #main control loop for pid controller
     def control_loop(self):
+        self.state+=1
 
         # #Printing state of machine to get a live display, publishing msg to start 
         # if(DEBUG):
@@ -276,6 +284,9 @@ class PID_controller():
             debug_img = self.img_processor.bridge.cv2_to_imgmsg(image_debug)
             self.debug_error_pub.publish(err_pt)
             self.debug_img_pub.publish(debug_img)
+
+            if(self.state < 100):
+                move.angular.z = 0.3
 
             #publish move command to robot
             self.drive_pub.publish(move)
