@@ -323,7 +323,7 @@ def filter_crops(imgs,template):
     license_plates = []
     location_ids = []
 
-    foundPlate = False
+    foundPlate = True
     for c in candidates:
         if(not foundPlate):
             foundPlate,_= compare_template(c[:,0:int(c.shape[1]/2)],template)
@@ -398,7 +398,7 @@ def pre_process(input,shape=INPUT_SIZE,mode=PRE_PROCESS_MODE):
             out.append(process_img(img))
         return out
     else:
-        return process_img(img)
+        return process_img(input)
 
 def crop_license_chars(img_in):
     """
@@ -525,7 +525,7 @@ class LicenseDetector:
             crop = get_license_bin_crop(self.latest_img)
             self.empty = True
 
-            if(crop is None or crop.shape[0] < 1 or crop.shape[1] < 1):
+            if(crop is None):
                 return
 
             cnts = None
@@ -608,7 +608,7 @@ class LicenseDetector:
 
             self.license_plate_pub.publish(String("Team1,pass,{id_to_publish},{plate_to_publish}"))
 
-    def save_image(self,img=None,filename=None,dir=abs_path+'/imgs/license_imgs'):
+    def save_image(self,img=None,filename=None,dir=abs_path+'/imgs/license_imgs/'):
         output = self.latest_img
         name = 'img_'+str(self.count)+'.jpg'
         if(img is not None):

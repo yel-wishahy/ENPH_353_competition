@@ -229,7 +229,7 @@ class PID_controller():
 
             #process images for robot state
             error,image_debug = self.get_error_path(image)
-            # detected_stop, image_debug = self.detect_stop(image_debug)
+            detected_stop, image_debug = self.detect_stop(image_debug)
             # detected_parking, image_debug = self.detect_parking_bin(image_debug)
 
             if(detected_stop or detected_parking):

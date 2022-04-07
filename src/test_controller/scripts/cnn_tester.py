@@ -9,6 +9,7 @@ import os
 import string
 
 CHARS = string.ascii_uppercase + string.digits
+
 abs_path = os.path.abspath('/home/yel-wishahy/ENPH_353_competition/src/test_controller')
 
 class PreProcessMode(Enum):
@@ -25,7 +26,7 @@ class PreProcessMode(Enum):
 # input_size = (200,100,1) #h,w,#clr channels
 #pre_process_mode = PreProcessMode.BINARY
 
-model_name = "my_model_V15.h5"
+model_name = "my_model_V18.h5"
 INPUT_SIZE = (100,100,1) #h,w, #clr Channels
 PRE_PROCESS_MODE = PreProcessMode.BINARY
 
