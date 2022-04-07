@@ -1,19 +1,14 @@
 #!/usr/bin/env python
 
-import queue
-import re
 import cv2
 import numpy as np
 import rospy
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-import roslib
-import os
 import imutils
-import copy
-from queue import Queue
 from cnn_tester import CharacterDetector, INPUT_SIZE, abs_path, PreProcessMode, PRE_PROCESS_MODE
 import string
+from std_msgs.msg import String
 
 camera_feed_topic = "/R1/pi_camera/image_raw"
 node = 'license_plate_detector'
@@ -514,6 +509,8 @@ class LicenseDetector:
         self.empty = True
         
         self.CR = CharacterDetector()
+
+        self.license_plate_pub = rospy.Publisher("/license_plate", String, queue_size=1)
     
     #subscriber callback that receives latest image from camera feed
     def license_callback(self, img):
@@ -542,6 +539,12 @@ class LicenseDetector:
             crops = get_license_plate_crop(crop,cnts,y_limits=(20,20))
             license_plates,location_ids = filter_crops(crops,self.template)
 
+            #Defining a maximum avg ID value to be replaced by any 
+            #IDs which would have a higher confidence value
+            maximim_id = 0
+            #An empty string variable which gets replaced with 
+            #the ID associated with the higheset confidence value
+            id_to_publish = ""
             for id in location_ids:
                 print('*****************')
                 print('***FOUND ID MATCH***')
@@ -552,16 +555,32 @@ class LicenseDetector:
                 crops = pre_process(crops)
 
                 prediction = self.CR.predict_image(np.array(crops))
+
+                id_sum = 0
+                temp_id = ""
                 for p in prediction:
                     argmax = np.argmax(p)
                     char = chars[argmax]
                     print(argmax,char)
+                    temp_id += char
+                    id_avg += p.max()
+
+                id_avg = id_sum / 4
+                if id_avg >= maximum_id:
+                    maximum_id = id_avg
+                    id_to_publish = temp_id
                 
                 self.save_image(id,dir=abs_path+'/imgs/id_imgs/')
                 for i in range(len(crops)):
                     name = 'id_' + str(self.count) + '_letter_' + str(i) + '.jpg'
                     self.save_image(crops[i],filename=name,dir=abs_path+'/imgs/id_imgs/')
 
+            #Defining a maximum avg plate value to be replaced by any 
+            #plates which would have a higher confidence value
+            maximum_plate = 0
+            #An empty string variable which gets replaced with 
+            #the plate associated with the higheset confidence value
+            plate_to_publish = ""
             for plate in license_plates:
                 print('*****************')
                 print('***FOUND LICENSE MATCH***')
@@ -574,10 +593,21 @@ class LicenseDetector:
 
                 prediction = self.CR.predict_image(np.array(crops))
                 # print(prediction)
+
+                plate_sum = 0
+                temp_plate = ""
                 for p in prediction:
                     argmax = np.argmax(p)
                     char = chars[argmax]
                     print(argmax,char)
+                    temp_plate += char
+                    plate_sum += p.max()
+
+                plate_avg = plate_sum / 4
+                if plate_avg >= maximum_plate:
+                    maximum_plate = plate_avg
+                    plate_to_publish = temp_plate
+
 
                 self.count = self.count + 1
                 self.save_image(plate)
@@ -585,7 +615,9 @@ class LicenseDetector:
                     name = 'plate_' + str(self.count) + '_letter_' + str(i) + '.jpg'
                     self.save_image(crops[i],name)
 
-    def save_image(self,img=None,filename=None,dir=abs_path+'/imgs/license_imgs/'):
+            self.license_plate_pub.publish(String("Team1,pass,{id_to_publish},{plate_to_publish}"))
+
+    def save_image(self,img=None,filename=None,dir=abs_path+'/imgs/license_imgs'):
         output = self.latest_img
         name = 'img_'+str(self.count)+'.jpg'
         if(img is not None):
