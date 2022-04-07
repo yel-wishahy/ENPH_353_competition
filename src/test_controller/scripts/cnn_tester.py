@@ -6,7 +6,9 @@ from tensorflow.python.keras.models import load_model
 import numpy as np
 import cv2
 import os
+import string
 
+CHARS = string.ascii_uppercase + string.digits
 abs_path = os.path.abspath('/home/yel-wishahy/ENPH_353_competition/src/test_controller')
 
 class PreProcessMode(Enum):
@@ -44,6 +46,7 @@ class CharacterDetector():
 			NN_prediction = self.model.predict(image_ar)
 
 		return NN_prediction
+
 	
 
 

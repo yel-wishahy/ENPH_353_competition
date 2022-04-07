@@ -6,7 +6,7 @@ import rospy
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import imutils
-from cnn_tester import CharacterDetector, INPUT_SIZE, abs_path, PreProcessMode, PRE_PROCESS_MODE
+from cnn_tester import CharacterDetector, INPUT_SIZE, abs_path, PreProcessMode, PRE_PROCESS_MODE, CHARS
 import string
 from std_msgs.msg import String
 
@@ -15,8 +15,6 @@ node = 'license_plate_detector'
 template_path = abs_path + '/imgs/p_template.jpg'
 
 FREQUENCY = 1000
-
-chars = string.ascii_uppercase + string.digits
 
 def main():
     rospy.init_node(node)
@@ -508,7 +506,7 @@ class LicenseDetector:
         self.save_image(self.template,'test.jpg')
         self.empty = True
         
-        self.CR = CharacterDetector()
+        self.OCR = CharacterDetector()
 
         self.license_plate_pub = rospy.Publisher("/license_plate", String, queue_size=1)
     
@@ -541,7 +539,7 @@ class LicenseDetector:
 
             #Defining a maximum avg ID value to be replaced by any 
             #IDs which would have a higher confidence value
-            maximim_id = 0
+            maximum_id = 0
             #An empty string variable which gets replaced with 
             #the ID associated with the higheset confidence value
             id_to_publish = ""
@@ -554,21 +552,14 @@ class LicenseDetector:
                 crops = crop_id_chars(id)
                 crops = pre_process(crops)
 
-                prediction = self.CR.predict_image(np.array(crops))
+                p = self.OCR.predict_image(np.array([crops[1]]))[0]
+                argmax = np.argmax(p)
+                char = CHARS[argmax]
+                print(argmax,char)
 
-                id_sum = 0
-                temp_id = ""
-                for p in prediction:
-                    argmax = np.argmax(p)
-                    char = chars[argmax]
-                    print(argmax,char)
-                    temp_id += char
-                    id_avg += p.max()
-
-                id_avg = id_sum / 4
-                if id_avg >= maximum_id:
-                    maximum_id = id_avg
-                    id_to_publish = temp_id
+                if p.max() >= maximum_id:
+                    maximum_id = p.max()
+                    id_to_publish = char
                 
                 self.save_image(id,dir=abs_path+'/imgs/id_imgs/')
                 for i in range(len(crops)):
@@ -591,14 +582,14 @@ class LicenseDetector:
                 crops = crop_license_chars(plate)
                 crops = pre_process(crops)
 
-                prediction = self.CR.predict_image(np.array(crops))
+                p = self.OCR.predict_image(np.array(crops))
                 # print(prediction)
 
                 plate_sum = 0
                 temp_plate = ""
-                for p in prediction:
+                for p in p:
                     argmax = np.argmax(p)
-                    char = chars[argmax]
+                    char = CHARS[argmax]
                     print(argmax,char)
                     temp_plate += char
                     plate_sum += p.max()
@@ -626,7 +617,6 @@ class LicenseDetector:
             name = filename
 
         cv2.imwrite(dir+name,output)
-        print('SAVED POTENTIAL LICENSE:',name)
 
 main()
 
