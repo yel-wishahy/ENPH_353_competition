@@ -26,7 +26,7 @@ class PreProcessMode(Enum):
 # input_size = (200,100,1) #h,w,#clr channels
 #pre_process_mode = PreProcessMode.BINARY
 
-model_name = "my_model_V18.h5"
+model_name = "my_model_V20.h5"
 INPUT_SIZE = (100,100,1) #h,w, #clr Channels
 PRE_PROCESS_MODE = PreProcessMode.BINARY
 
