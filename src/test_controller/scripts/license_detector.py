@@ -556,7 +556,7 @@ class LicenseDetector:
                 argmax = np.argmax(p)
                 char = CHARS[argmax]
 
-                if char in string.digits:
+                if char in string.digits and char != '0':
                     print(argmax,char)
                     if p.max() >= maximum_id:
                         maximum_id = p.max()
