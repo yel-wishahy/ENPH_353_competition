@@ -11,16 +11,12 @@ import os
 import imutils
 import copy
 from queue import Queue
-from cnn_tester import CharacterDetector, input_size
+from cnn_tester import CharacterDetector, input_size, abs_path
 import string
-
-
-PKG = 'test_controller'
-roslib.load_manifest(PKG)
-dir_path = roslib.packages.get_pkg_dir(PKG)
 
 camera_feed_topic = "/R1/pi_camera/image_raw"
 node = 'license_plate_detector'
+template_path = abs_path + '/imgs/template.jpg'
 
 FREQUENCY = 1000
 
@@ -35,6 +31,7 @@ def main():
     while not rospy.is_shutdown():
         detector.process_loop()
         rate.sleep()
+
 
 def find_centroid(c):
     """
@@ -377,7 +374,15 @@ def is_license_plate(img):
     
     return (X.size > 0 and Y.size > 0)
 
-def crop_license_letters(img):
+def pre_process(img,input_shape=input_size):
+    resize = cv2.resize(img, (input_shape[1],input_shape[0]))
+    gray = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY)
+
+    bi = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY_INV,101,15)#101,15 or101, 25
+
+    return bi.reshape(input_shape)
+
+def crop_license_chars(img):
     """
     @brief crops characters from license plate into 4 (same size) images
         Does this by binary thresholding image and finding xmin and xmax of nonzero pixels
@@ -403,23 +408,38 @@ def crop_license_letters(img):
         if(i==3):
             continue
         c = img[:,xmin + (i-1)*dx:xmin+i*dx]
-
-        c = cv2.resize(c, (input_size[1],input_size[0]))
+        c = pre_process(c)
         crops.append(c)
 
     return crops
 
+def crop_id_chars(img):
+    """
+    to do
+    """
+    gray = cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_BGR2GRAY)
+    bi = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,101,15)
 
+    xmax = cv2.findNonZero(bi)[:,:,0].max()
+    xmin = cv2.findNonZero(bi)[:,:,0].min()
+    dx = int((xmax-xmin)/5) #5 is the number of crops (4 characters + middle seperations)
+    crops = []
+    for i in range(1,3):
+        c = img[:,xmin + (i-1)*dx:xmin+i*dx]
+        c = pre_process(c)
+        crops.append(c)
+
+    return crops
 
 class LicenseDetector:
     def __init__(self):
         self.bridge = CvBridge()
         self.image_sub = rospy.Subscriber(camera_feed_topic, Image, self.license_callback, queue_size=1)
-        print('initialized img subscriber')
+
         self.latest_img = Image()
         self.count = 0
-        # self.template = cv2.imread(os.path.join(dir_path, "/src/data/template.jpg"))
-        self.template = cv2.imread('template.jpg', cv2.IMREAD_UNCHANGED)
+
+        self.template = cv2.imread(template_path, cv2.IMREAD_UNCHANGED)
         self.save_image(self.template,'test.jpg')
         self.queue = Queue()
         self.empty = True
@@ -453,31 +473,44 @@ class LicenseDetector:
             crops= get_license_plate_crop(crop,cnts,y_limits=(20,20))
             license_plates,location_ids = filter_crops(crops,self.template)
 
+            for id in location_ids:
+                print('*****************')
+                print('***FOUND ID MATCH***')
+                print('*****************')
+                self.count = self.count + 1
+                crops = crop_id_chars(id)
+
+                prediction = self.CR.predict_image(np.array(crops))
+                for p in prediction:
+                    argmax = np.argmax(p)
+                    char = chars[argmax]
+                    print(argmax,char)
+                
+                self.save_image(id,dir='id_imgs/')
+
             for plate in license_plates:
                 print('*****************')
-                print('***FOUND MATCH***')
+                print('***FOUND LICENSE MATCH***')
                 print('*****************')
                 cv2.imshow("Debug View",plate)
                 cv2.waitKey(1)
 
-                crops = crop_license_letters(plate)
+                crops = crop_license_chars(plate)
 
                 prediction = self.CR.predict_image(np.array(crops))
-                print(prediction)
+                # print(prediction)
                 for p in prediction:
                     argmax = np.argmax(p)
                     char = chars[argmax]
                     print(argmax,char)
 
-                # print(predict_image(image_array))
-                # print(np.argmax(predict_image(image_array)))
-                # self.count = self.count + 1
-                # self.save_image(plate)
+                self.count = self.count + 1
+                self.save_image(plate,dir='license_imgs/')
                 # for i in range(len(crops)):
                 #     name = 'plate_' + str(self.count) + '_letter_' + str(i) + '.jpg'
                 #     self.save_image(crops[i],name)
 
-    def save_image(self,img=None,filename=None):
+    def save_image(self,img=None,filename=None,dir=abs_path+'/imgs/license_imgs'):
         output = self.latest_img
         name = 'img_'+str(self.count)+'.jpg'
         if(img is not None):
@@ -485,7 +518,7 @@ class LicenseDetector:
         if(filename is not None):
             name = filename
 
-        cv2.imwrite('imgs/'+name,output)
+        cv2.imwrite(dir+name,output)
         print('SAVED POTENTIAL LICENSE:',name)
 
 main()

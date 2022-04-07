@@ -1,0 +1,5 @@
+<launch>
+
+  <node name="license_detector" pkg="test_controller" type="license_detector.py" cwd="node" respawn="false" output="screen"/>
+  
+</launch>
