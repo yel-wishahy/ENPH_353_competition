@@ -595,7 +595,7 @@ class LicenseDetector:
                     temp_plate += char
                     plate_sum += p.max()
 
-                if temp_plate[0] in string.ascii_uppercase and temp_plate[1] in string.ascii_uppercase and temp_plate[2] in string.digits and templ_plate[3] in string.digits:
+                if temp_plate[0] in string.ascii_uppercase and temp_plate[1] in string.ascii_uppercase and temp_plate[2] in string.digits and temp_plate[3] in string.digits:
                     plate_avg = plate_sum / 4
                     if plate_avg >= maximum_plate:
                         maximum_plate = plate_avg
