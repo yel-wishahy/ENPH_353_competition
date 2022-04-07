@@ -555,9 +555,9 @@ class LicenseDetector:
                 p = self.OCR.predict_image(np.array([crops[1]]))[0]
                 argmax = np.argmax(p)
                 char = CHARS[argmax]
-                print(argmax,char)
 
                 if char in string.digits:
+                    print(argmax,char)
                     if p.max() >= maximum_id:
                         maximum_id = p.max()
                         id_to_publish = char
