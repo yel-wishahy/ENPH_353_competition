@@ -555,11 +555,12 @@ class LicenseDetector:
                 p = self.OCR.predict_image(np.array([crops[1]]))[0]
                 argmax = np.argmax(p)
                 char = CHARS[argmax]
-                print(argmax,char)
 
-                if p.max() >= maximum_id:
-                    maximum_id = p.max()
-                    id_to_publish = char
+                if char in string.digits and char != '0':
+                    print(argmax,char)
+                    if p.max() >= maximum_id:
+                        maximum_id = p.max()
+                        id_to_publish = char
                 
                 self.save_image(id,dir=abs_path+'/imgs/id_imgs/')
                 for i in range(len(crops)):
@@ -594,10 +595,11 @@ class LicenseDetector:
                     temp_plate += char
                     plate_sum += p.max()
 
-                plate_avg = plate_sum / 4
-                if plate_avg >= maximum_plate:
-                    maximum_plate = plate_avg
-                    plate_to_publish = temp_plate
+                if temp_plate[0] in string.ascii_uppercase and temp_plate[1] in string.ascii_uppercase and temp_plate[2] in string.digits and temp_plate[3] in string.digits:
+                    plate_avg = plate_sum / 4
+                    if plate_avg >= maximum_plate:
+                        maximum_plate = plate_avg
+                        plate_to_publish = temp_plate
 
 
                 self.count = self.count + 1
@@ -606,7 +608,7 @@ class LicenseDetector:
                     name = 'plate_' + str(self.count) + '_letter_' + str(i) + '.jpg'
                     self.save_image(crops[i],name)
 
-            self.license_plate_pub.publish(String("Team1,pass,{id_to_publish},{plate_to_publish}"))
+            self.license_plate_pub.publish(String("Team1,pass," + id_to_publish + "," + plate_to_publish))
 
     def save_image(self,img=None,filename=None,dir=abs_path+'/imgs/license_imgs/'):
         output = self.latest_img

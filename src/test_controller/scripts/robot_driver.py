@@ -16,6 +16,7 @@ from multiprocessing import Process
 from enum import Enum
 import time
 import imutils
+import random
 
 #controller node name
 controller_node = "test_controller"
@@ -58,7 +59,7 @@ def main():
     start_time = rospy.get_time()
 
     controller.license_plate_pub.publish(String("Team1,pass,0,AAAA"))
-    end_time = start_time + 60*5
+    end_time = start_time + 60*4
 
     while not rospy.is_shutdown() and rospy.get_time() < end_time:
         controller.control_loop()
@@ -237,7 +238,7 @@ class PID_controller():
 
             #process images for robot state
             error,image_debug = self.get_error_path(image)
-            detected_stop, image_debug = self.detect_stop(image_debug)
+            # detected_stop, image_debug = self.detect_stop(image_debug)
             # detected_parking, image_debug = self.detect_parking_bin(image_debug)
 
             if(detected_stop or detected_parking):
@@ -261,7 +262,7 @@ class PID_controller():
                 self.drive_state = DriveState.STOPPED
 
             if(self.drive_state == DriveState.STOPPED):
-                if(rospy.get_time() >= self.last_stop_time + STOP_DURATION):
+                if(rospy.get_time() >= self.last_stop_time + random.randrange(1,STOP_DURATION)):
                     self.drive_state = DriveState.CROSSING
                 else:
                     move.linear.x = 0

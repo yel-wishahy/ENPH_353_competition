@@ -18,17 +18,17 @@ class PreProcessMode(Enum):
 	BINARY = 2
 
 
-# model_name = "my_model_V3.h5"
-# input_size = (298, 150,3) #h,w, #clr Channels
-# pre_process_mode = PreProcessMode.NONE
+model_name = "my_model_V3.h5"
+INPUT_SIZE = (298, 150,3) #h,w, #clr Channels
+PRE_PROCESS_MODE = PreProcessMode.NONE
 
 # model_name = "my_model_V13.h5"
-# input_size = (200,100,1) #h,w,#clr channels
+# INPUT_SIZE = (200,100,1) #h,w,#clr channels
 #pre_process_mode = PreProcessMode.BINARY
 
-model_name = "my_model_V18.h5"
-INPUT_SIZE = (100,100,1) #h,w, #clr Channels
-PRE_PROCESS_MODE = PreProcessMode.BINARY
+# model_name = "my_model_V15.h5"
+# INPUT_SIZE = (100,100,1) #h,w, #clr Channels
+# PRE_PROCESS_MODE = PreProcessMode.BINARY
 
 
 model_path = abs_path + '/models/' + model_name
