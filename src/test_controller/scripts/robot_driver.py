@@ -282,7 +282,7 @@ class PID_controller():
             err_pt = Float32MultiArray()
             err_pt.data = [float(error),rospy.get_time()]
             debug_img = Image()
-            debug_img = self.img_processor.bridge.cv2_to_imgmsg(image_debug)
+            debug_img = self.img_processor.bridge.cv2_to_imgmsg(image_debug,"bgr8")
             self.debug_error_pub.publish(err_pt)
             self.debug_img_pub.publish(debug_img)
 

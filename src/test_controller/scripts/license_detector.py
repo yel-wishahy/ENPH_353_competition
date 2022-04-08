@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 
+from queue import Queue
 import cv2
 import numpy as np
 import rospy
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import imutils
-from cnn_tester import CharacterDetector, INPUT_SIZE, abs_path, PreProcessMode, PRE_PROCESS_MODE, CHARS
+from cnn_ocr import CharacterDetector, INPUT_SIZE, abs_path, PreProcessMode, PRE_PROCESS_MODE, CHARS
 import string
 from std_msgs.msg import String
 
 camera_feed_topic = "/R1/pi_camera/image_raw"
-node = 'license_plate_detector'
+node = 'license_detector'
 template_path = abs_path + '/imgs/p_template.jpg'
 
 FREQUENCY = 1000
@@ -400,7 +401,7 @@ def pre_process(input,shape=INPUT_SIZE,mode=PRE_PROCESS_MODE):
     else:
         return process_img(input)
 
-def crop_license_chars(img_in):
+def crop_license_chars(img_in,contour_find=False):
     """
     @brief crops characters from license plate into 4 images
 
@@ -471,10 +472,12 @@ def crop_license_chars(img_in):
             crops.append(c[1])
 
         return crops
-
-    #return best of 2 crops
-    crops = crop_letters_contours(img_in)
-    crops = clean_imgs(crops)
+    
+    crops = []
+    if contour_find:
+        #return best of 2 crops
+        crops = crop_letters_contours(img_in)
+        crops = clean_imgs(crops)
     if(len(crops) == 4):
         return crops
     else:
@@ -509,6 +512,14 @@ class LicenseDetector:
         self.OCR = CharacterDetector()
 
         self.license_plate_pub = rospy.Publisher("/license_plate", String, queue_size=1)
+        
+        self.bin_debug_pub = rospy.Publisher("/license_detector/bin_debug", Image, queue_size=1)
+        self.plate_debug_pub = rospy.Publisher("/license_detector/plate_debug", Image, queue_size=1)
+        self.chars_debug_pub = rospy.Publisher("/license_detector/chars_debug", Image, queue_size=1)
+
+        self.plate_debugF_pub = rospy.Publisher("/license_detector/plate_debug_false", Image, queue_size=100)
+        self.chars_debugF_pub = rospy.Publisher("/license_detector/chars_debug_false", Image, queue_size=100)
+        self.debug_items = []
     
     #subscriber callback that receives latest image from camera feed
     def license_callback(self, img):
@@ -522,93 +533,119 @@ class LicenseDetector:
         if(self.empty):
             return
         else:
-            crop = get_license_bin_crop(self.latest_img)
+            license_bin_crop = get_license_bin_crop(self.latest_img)
             self.empty = True
 
-            if(crop is None):
+            if(license_bin_crop is None):
                 return
 
-            cnts = None
+            plate_contours = None
             try:
-                cnts,_ = find_license_plate_contours(crop)
+                plate_contours,_ = find_license_plate_contours(license_bin_crop)
             except:
                 return
 
-            crops = get_license_plate_crop(crop,cnts,y_limits=(20,20))
-            license_plates,location_ids = filter_crops(crops,self.template)
+            plate_crops = get_license_plate_crop(license_bin_crop,plate_contours,y_limits=(20,20))
+            license_plates,location_ids = filter_crops(plate_crops,self.template)
+            license_plates = clean_imgs(license_plates)
+            location_ids = clean_imgs(location_ids)
 
-            #Defining a maximum avg ID value to be replaced by any 
-            #IDs which would have a higher confidence value
-            maximum_id = 0
-            #An empty string variable which gets replaced with 
-            #the ID associated with the higheset confidence value
-            id_to_publish = ""
-            for id in location_ids:
-                print('*****************')
-                print('***FOUND ID MATCH***')
-                print('*****************')
-                self.count = self.count + 1
+            id_to_publish = self.predict_id(location_ids)
+            plate_to_publish = self.predict_plate(license_plates)
 
-                crops = crop_id_chars(id)
-                crops = pre_process(crops)
-
-                p = self.OCR.predict_image(np.array([crops[1]]))[0]
-                argmax = np.argmax(p)
-                char = CHARS[argmax]
-
-                if char in string.digits and char != '0':
-                    print(argmax,char)
-                    if p.max() >= maximum_id:
-                        maximum_id = p.max()
-                        id_to_publish = char
-                
-                self.save_image(id,dir=abs_path+'/imgs/id_imgs/')
-                for i in range(len(crops)):
-                    name = 'id_' + str(self.count) + '_letter_' + str(i) + '.jpg'
-                    self.save_image(crops[i],filename=name,dir=abs_path+'/imgs/id_imgs/')
-
-            #Defining a maximum avg plate value to be replaced by any 
-            #plates which would have a higher confidence value
-            maximum_plate = 0
-            #An empty string variable which gets replaced with 
-            #the plate associated with the higheset confidence value
-            plate_to_publish = ""
-            for plate in license_plates:
-                print('*****************')
-                print('***FOUND LICENSE MATCH***')
-                print('*****************')
-                cv2.imshow("Debug View",plate)
-                cv2.waitKey(1)
-
-                crops = crop_license_chars(plate)
-                crops = pre_process(crops)
-
-                p = self.OCR.predict_image(np.array(crops))
-                # print(prediction)
-
-                plate_sum = 0
-                temp_plate = ""
-                for p in p:
-                    argmax = np.argmax(p)
-                    char = CHARS[argmax]
-                    print(argmax,char)
-                    temp_plate += char
-                    plate_sum += p.max()
-
-                if temp_plate[0] in string.ascii_uppercase and temp_plate[1] in string.ascii_uppercase and temp_plate[2] in string.digits and temp_plate[3] in string.digits:
-                    plate_avg = plate_sum / 4
-                    if plate_avg >= maximum_plate:
-                        maximum_plate = plate_avg
-                        plate_to_publish = temp_plate
+            #check debug items collected throughout process
+            #print msg/publish img
+            #note : consider labelling imgs in future?
+            while len(self.debug_items) > 0:
+                d = self.debug_items.pop()
+                if(d.is_valid()):
+                    print(d.get_prediction(), d.is_valid())
+                    self.chars_debug_pub.publish(self.bridge.cv2_to_imgmsg(d.get_crops(),"bgr8"))
+                    self.plate_debug_pub.publish(self.bridge.cv2_to_imgmsg(d.get_plate(), "bgr8"))
+                else:
+                    self.chars_debugF_pub.publish(self.bridge.cv2_to_imgmsg(d.get_crops(),"bgr8"))
+                    self.plate_debugF_pub.publish(self.bridge.cv2_to_imgmsg(d.get_plate(), "bgr8"))
 
 
-                self.count = self.count + 1
-                self.save_image(plate)
-                for i in range(len(crops)):
-                    name = 'plate_' + str(self.count) + '_letter_' + str(i) + '.jpg'
-                    self.save_image(crops[i],name)
-
+            self.bin_debug_pub.publish(self.bridge.cv2_to_imgmsg(license_bin_crop,"bgr8"))
             self.license_plate_pub.publish(String("Team1,pass," + id_to_publish + "," + plate_to_publish))
+
+    def predict_id(self,ids):
+        """
+        @brief predict location id from a list of cropped ids
+        @param ids, list of images hopefully containing 'P#'
+
+        adds results to debug item list throughoutt the process
+
+        @return 1 character representing optimal number
+        OR '' empty character meaning no good id found
+
+        """
+        predictions = []
+        best_id = ""
+
+        for id in ids:
+            flag = True
+            crops = crop_id_chars(id)
+            crops = pre_process(crops)
+
+            p = self.OCR.predict_image(np.array(crops)) #list of prediction tuples : (char,confidence)
+
+            if(p[0][0] is not 'P'):
+                flag = False
+            if(p[1][0] in string.ascii_uppercase or p[1][0] is '0'):
+                flag = False
+            if(flag):
+                predictions.append(p[1])
+            
+            d = PlateDebugItem(id,crops,p,flag)
+            self.debug_items.append(d)
+        
+        # best_id = sorted(predictions, key=lambda val: val[1],reverse=True)[0][0]
+        if(len(predictions) > 0):
+            best_id = sorted(predictions, key=lambda val: val[1],reverse=True)[0][0]
+
+        return best_id
+
+    def predict_plate(self,plates):
+        """
+        @brief predict license plate string from a list of cropped ids
+        @param ids, list of images hopefully containing 'LL ##'
+
+        adds results to debug item list throughout the process
+
+        @return string representing 4 correct characters
+        OR "" empty string meaning no good id found
+
+        """
+        predictions = [[],[],[],[]]
+        best_plate = ""
+
+        for plate in plates:
+            flag = True
+            crops = crop_license_chars(plate)
+            crops = pre_process(crops)
+
+            p = self.OCR.predict_image(np.array(crops)) #list of prediction tuples : (char,confidence)
+
+            for i in range(4):
+                if( i <= 1 and p[i][0] in string.digits):
+                    flag = False
+                if(i > 1 and p[i][0] in string.ascii_uppercase):
+                    flag = False
+                if(flag):
+                    predictions[i].append(p[i])
+            
+            d = PlateDebugItem(plate,crops,p,flag)
+            self.debug_items.append(d)
+
+        for i in range(4):
+            if(len(predictions[i]) > 0):
+                best_plate += sorted(predictions[i], key=lambda val: val[1],reverse=True)[0][0]
+            else:
+                return ""
+
+        return best_plate
 
     def save_image(self,img=None,filename=None,dir=abs_path+'/imgs/license_imgs/'):
         output = self.latest_img
@@ -620,5 +657,25 @@ class LicenseDetector:
 
         cv2.imwrite(dir+name,output)
 
-main()
+class PlateDebugItem():
+    def __init__(self,plate,crops,prediction,valid):
+        self.plate = plate #associated plate crop
+        self.crops = crops #list of image crops
+        self.prediction = CharacterDetector.prediction_to_string(prediction) #result string with chars,confidence
+        self.valid = valid #is id/plate valid?
 
+    def get_plate(self):
+        return self.plate
+
+    def get_crops(self):
+        bw_stack =  np.concatenate(self.crops, axis=0)
+        clr_stack = cv2.cvtColor(bw_stack, cv2.COLOR_GRAY2BGR)
+        return clr_stack
+    
+    def get_prediction(self):
+        return self.prediction
+
+    def is_valid(self):
+        return self.valid
+
+main()
