@@ -1,22 +1,22 @@
 #!/usr/bin/env python
 
-from queue import Queue
+from turtle import right
+from matplotlib import axes
 from geometry_msgs.msg import Twist
 import rospy
 import cv2
-from std_msgs.msg import String,Float32MultiArray
+from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 import matplotlib.pyplot as plt
-from threading import Thread
-import matplotlib.animation as animation
-from multiprocessing import Pool
-from multiprocessing import Process
 from enum import Enum
 import time
 import imutils
 import random
+import io
+from image_utils import contour,get_gray,draw_cricle,hsv_threshold
+from scipy.spatial.distance import cosine as cosine_distance
 
 #controller node name
 controller_node = "test_controller"
@@ -26,21 +26,24 @@ cmd_vel_topic = "/R1/cmd_vel"
 license_plate_topic = "/license_plate"
 
 #internal debug publisher topics
-debug_img_topic = "/test_controller/image"
-debug_err_topic = "/test_controller/error"
+debug_roadimg_topic = "/test_controller/road_image"
+debug_stopimg_topic = "/test_controller/crosswalk_image"
+debug_errplot_topic = "/test_controller/error_plot"
 
 #debug /tune mode
 DEBUG = True
 
 #pid driving controller parameters
 
-DRIVE_SPEED = 0.2
+DRIVE_SPEED = 0.3
+
+RIGHT_BORDER_MODIFIER = 325
 
 K_P = 8#3.5
-K_D = 0.5#2.5
+K_D = 1#2.5
 K_I = 0#3
 
-FREQUENCY = 250 # #hz
+FREQUENCY = 1000 # #hz
 MAX_ERROR = 20
 G_MULTIPLIER = 0.05
 ERROR_HISTORY_LENGTH = 5 #array size
@@ -56,23 +59,42 @@ def main():
     rospy.init_node(controller_node)
     controller = PID_controller()
     rate = rospy.Rate(FREQUENCY)
-    start_time = rospy.get_time()
 
-    controller.license_plate_pub.publish(String("Team1,pass,0,AAAA"))
-    end_time = start_time + 60*4
+
+    start_time = rospy.get_time()
+    timer_pub = rospy.Publisher("/license_plate", String, queue_size=1)
+
+    timer_pub.publish(String("Team1,pass,0,AAAA"))
+    end_time = start_time + 60*500 #TODO CHANGE THIS FOR TIME
 
     while not rospy.is_shutdown() and rospy.get_time() < end_time:
         controller.control_loop()
         rate.sleep()
 
-    controller.license_plate_pub.publish(String("Team1,pass,-1,AAAA"))
+    timer_pub.publish(String("Team1,pass,-1,AAAA"))
 
 
-    controller.stop_cmd()
+    controller.send_stop_cmd()
 
+def get_plot_img(error_array, time_array):
+    if(error_array is not None and time_array is not None):
+        plt.clf()
+        fig, ax=plt.subplots()
+        ax.set_ylim((-1*MAX_ERROR,MAX_ERROR))
+        ax.plot(time_array[:-1],error_array[:-1])
+        plt.pause(0.0000001)
 
+        with io.BytesIO() as buff:
+            fig.savefig(buff, format='raw')
+            buff.seek(0)
+            data = np.frombuffer(buff.getvalue(), dtype=np.uint8)
+        w, h = fig.canvas.get_width_height()
+        im = data.reshape((int(h), int(w), -1))
+        return cv2.cvtColor(im, cv2.COLOR_RGBA2BGR)
+    
+    return None
 
-class image_processor:
+class CameraFeed:
     def __init__(self):
         self.bridge = CvBridge()
         self.image_sub = rospy.Subscriber(camera_feed_topic, Image, self.callback, queue_size=1)
@@ -96,74 +118,6 @@ class image_processor:
     def save_image(self):
         cv2.imwrite('imgs/img_'+str(self.frameCount)+'.jpg',self.latest_img)
         print('SAVED IMAGE:','img_',self.frameCount)
-        
-
-    #gets the grayed version of img with desired colour filter
-    #if clr='b' it will gray based on blue filter
-    #otherwise white
-    def get_gray(self,img, clr='w'):
-        if(clr is 'b'):
-            img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-
-            ## Gen lower mask (0-5) and upper mask (175-180) of RED
-            mask1 = cv2.inRange(img_hsv, (0,50,20), (5,255,255))
-            mask2 = cv2.inRange(img_hsv, (175,50,20), (180,255,255))
-
-            ## Merge the mask and crop the red regions
-            mask = cv2.bitwise_or(mask1, mask2 )
-            cropped = cv2.bitwise_and(img, img, mask=mask)
-            gray = cv2.cvtColor(cropped, cv2.COLOR_HSV2BGR)
-            gray = cv2.cvtColor(gray, cv2.COLOR_BGR2GRAY)
-
-            return gray
-        if(clr is 'w'):
-            inv = (255-img)
-            gray = cv2.cvtColor(inv, cv2.COLOR_BGR2GRAY)
-            return gray
-
-    #given a source image and a grayed version of it that image highlight the desired colour
-    #finds the contours and returns them
-    def get_contours(self,image,gray):
-        image_contour = np.copy(image)
-        # Gaussian blur image for noise
-        blur = cv2.GaussianBlur(gray,(5,5),0)
-
-        # Color thresholding
-        ret,thresh1 = cv2.threshold(blur,60,255,cv2.THRESH_BINARY_INV)
-
-        # Erode and dilate to remove accidental line detections
-        mask = cv2.erode(thresh1, None, iterations=2)
-        mask = cv2.dilate(mask, None, iterations=2)
-
-        # Find the contours of the frame
-        _,contours,_ = cv2.findContours(mask.copy(), 1, cv2.CHAIN_APPROX_SIMPLE)
-
-        return sorted(contours,key=cv2.contourArea,reverse=True)
-    
-    def get_plates(self,image,gray):
-        edged = cv2.Canny(gray, 30, 200) 
-        contours = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        contours = imutils.grab_contours(contours)
-        contours = sorted(contours, key = cv2.contourArea, reverse = True)[:10]
-        screenCnt = None
-
-        for c in contours:
-            
-            peri = cv2.arcLength(c, True)
-            approx = cv2.approxPolyDP(c, 0.018 * peri, True)
-         
-            if len(approx) == 4:
-                screenCnt = approx
-                break
-
-        if screenCnt is None:
-            detected = 0
-            print ("No contour detected")
-        else:
-             detected = 1
-
-        if detected == 1:
-            cv2.drawContours(image, [screenCnt], -1, (0, 0, 255), 3)
 
 class DriveState(Enum):
     DRIVE_FORWARD = 1
@@ -179,15 +133,18 @@ class PID_controller():
         self.road_clr = [85,85,85]
         self.border_clr = [0,0,0]
         self.stop_clr  = [0,0,255]
-        self.parking_clr = [100,0,0]#[200,100,100]#[121,19,20]
         
+        #init drive command subscriber
         self.drive_pub = rospy.Publisher(cmd_vel_topic, Twist, queue_size=1)
-        self.license_plate_pub = rospy.Publisher(license_plate_topic, String, queue_size=1)
 
-        self.debug_error_pub = rospy.Publisher(debug_err_topic, Float32MultiArray, queue_size=10)
-        self.debug_img_pub = rospy.Publisher(debug_img_topic, Image, queue_size=10)
+        #init camera feed
+        self.camera_feed = CameraFeed()
 
-        self.img_processor = image_processor()
+        #debug topics
+        self.debug_errorimg_pub = rospy.Publisher(debug_errplot_topic, Image, queue_size=10)
+        self.debug_roadimg_pub = rospy.Publisher(debug_roadimg_topic, Image, queue_size=10)
+        self.debug_stopimg_pub = rospy.Publisher(debug_stopimg_topic, Image, queue_size=10)
+
 
         self.last_error = 0
         self.last_time = rospy.get_time()
@@ -199,104 +156,71 @@ class PID_controller():
 
         self.move_state = 0
         self.last_stop_time = 0
-        self.last_stop_detect = False
+        self.pedestrian_crossing = False
+        self.last_stop_points = []
 
         #Setting an arbitrary state to start timer at
         self.state = 1
         self.drive_state = DriveState.DRIVE_FORWARD
-        time.sleep(1)
+
+        self.debug_items = []
 
 
     #main control loop for pid controller
     def control_loop(self):
         self.state+=1
 
-        # #Printing state of machine to get a live display, publishing msg to start 
-        # if(DEBUG):
-        #     print("****State: {}".format(self.state))
-        # if (self.state == 1):
-        #     print("==== Start timer")
-        #     self.license_plate_pub.publish(String("Team1,pass,0,AAAA"))
-
-        # #After about 25 secs, state will reach 500. Enough time for the robot to have 
-        # #moved 1m, will then stop timer; feel free to adjust
-        # if self.state == 500:
-        #     self.license_plate_pub.publish(String("Team1,pass,-1,AAAA"))
-        #     print("==== End timer")
-        #     self.state +=1
-        # elif self.state < 500:
-        #     self.state +=1
-
-
-
-        if(self.img_processor.empty is False):
-            image = self.img_processor.latest_img
+        if(self.camera_feed.empty is False):
+            image = self.camera_feed.latest_img
             move = Twist()
-            image_debug = image
-            detected_stop = False
-            detected_parking = False
 
-            #process images for robot state
-            error,image_debug = self.get_error_path(image)
-            # detected_stop, image_debug = self.detect_stop(image_debug)
-            # detected_parking, image_debug = self.detect_parking_bin(image_debug)
+            # error = self.get_error_road(image)
+            # error_border = self.get_error_border(image)
+            # error = (error + error_border)/2
+            error = self.get_error_right(image)
+            g = self.calculate_pid(error)
 
-            if(detected_stop or detected_parking):
-                if(self.drive_state == DriveState.DRIVE_FORWARD):
-                    self.drive_state = DriveState.STOPPING
-                elif(self.drive_state == DriveState.CROSSING and not self.last_stop_detect):
-                    self.drive_state = DriveState.FINISHED_CROSSING
-            else:
-                if(self.drive_state == DriveState.FINISHED_CROSSING):
-                    self.drive_state = DriveState.DRIVE_FORWARD
-        
-
-            if(self.drive_state == DriveState.DRIVE_FORWARD):
-                g = self.calculate_pid(error)
-                move = self.get_move_cmd(g)
-
-            if(self.drive_state == DriveState.STOPPING):
-                self.last_stop_time = rospy.get_time()
-                move.linear.x = 0
-                move.angular.z = 0
+            stop_flag = self.detect_stop(image)
+            if(stop_flag == 1):
                 self.drive_state = DriveState.STOPPED
+            if(stop_flag == 2):
+                self.drive_state = DriveState.CROSSING
+            if(stop_flag ==3):
+                self.drive_state == DriveState.DRIVE_FORWARD
+            
 
-            if(self.drive_state == DriveState.STOPPED):
-                if(rospy.get_time() >= self.last_stop_time + random.randrange(1,STOP_DURATION)):
-                    self.drive_state = DriveState.CROSSING
-                else:
-                    move.linear.x = 0
-                    move.angular.z = 0
+        
+            if(self.drive_state == DriveState.DRIVE_FORWARD or self.drive_state == DriveState.CROSSING):
+                move = self.get_move_cmd(g)
+            
+            # if(self.state < 100):
+            #     move.angular.z = 0.3
 
-            if(self.drive_state == DriveState.CROSSING or self.drive_state == DriveState.FINISHED_CROSSING):
-                g = self.calculate_pid(error)
-                move = self.get_move_cmd(g,1.5*DRIVE_SPEED)
-
-
-            self.img_processor.empty = True
-            self.last_stop_detect = detected_stop
-
-            print("STATE: " ,self.drive_state)
-
-            #publish error and image to debug topics
-            err_pt = Float32MultiArray()
-            err_pt.data = [float(error),rospy.get_time()]
-            debug_img = Image()
-            debug_img = self.img_processor.bridge.cv2_to_imgmsg(image_debug,"bgr8")
-            self.debug_error_pub.publish(err_pt)
-            self.debug_img_pub.publish(debug_img)
-
-            if(self.state < 100):
-                move.angular.z = 0.3
+            self.camera_feed.empty = True
+            self.publish_debug()
 
             #publish move command to robot
             self.drive_pub.publish(move)
 
+    def publish_debug(self):
+        """
+        @brief: publish debug items to ros debug topics
+        """
+        while len(self.debug_items) > 0:
+            d = self.debug_items.pop()
+            if(d.road_img is not None):
+                self.debug_roadimg_pub.publish(self.camera_feed.bridge.cv2_to_imgmsg(d.road_img,"bgr8"))    
+            if(d.stop_img is not None):
+                self.debug_stopimg_pub.publish(self.camera_feed.bridge.cv2_to_imgmsg(d.stop_img,"bgr8"))
+            if(d.err_img is not None):
+                self.debug_errorimg_pub.publish(self.camera_feed.bridge.cv2_to_imgmsg(d.err_img,"bgr8"))
 
-    #get move command based on p+i+d= g
-    #g only impacts angular.z
-    #for now linear.x is constant
     def get_move_cmd(self,g,x_speed=DRIVE_SPEED):
+        """
+        get move command based on p+i+d= g
+        g only impacts angular.z
+        for now linear.x is constant
+        """
         move = Twist()
 
         move.angular.z = g * G_MULTIPLIER
@@ -308,19 +232,19 @@ class PID_controller():
 
         return move
 
-    #stop command
-    def stop_cmd(self):
+    def send_stop_cmd(self):
         move = Twist()
         move.angular.z = 0
         move.linear.x = 0
         self.drive_pub.publish(move)
 
-
-    #calculate pid : proportionality, integration and derivative values
-    #tries to do a better job by using numpy trapezoidal integration as well as numpy gradient
-    #uses error arrays for integration
-    #error arrays are of size error_history 9global variable)
     def calculate_pid(self, error):
+        """
+        calculate pid : proportionality, integration and derivative values
+        tries to do a better job by using numpy trapezoidal integration as well as numpy gradient
+        uses error arrays for integration
+        error arrays are of size error_history 9global variable)
+        """
         curr_time = rospy.get_time()
         self.error_array[self.index] = error
         self.time_array[self.index] = curr_time
@@ -341,60 +265,141 @@ class PID_controller():
         else:
             self.index += 1
 
+        # debug_item = RoadDebugItem(error_array=self.error_array,time_array=self.time_array)
+        # self.debug_items.append(debug_item)
+
         print("pid ", p, i, d)
         g = p + i + d
         return g
     
+    def get_error_border(self, image):
+        """
+        obtains error from camera feed frame by using cv2.findContours
+
+        image is an np array, some useful techniques are applied before contour detection 
+        to make it less prone to error
+
+        contour basically outlines the pathes/borders on either side of the road
+        from there the centre of the road to obtained relative to the 2 paths
+
+        The error is the displacement of the robot/camera from the actual path centre
+        this displacement is mapped to a smaller value with a maximum of max_error using np.interpolate
+        the mapped displacement is returned as the error to be used for pid calculations
+        """
+        xerror = 0
+        img_debug = image.copy()
+
+        max_reading_error = image.shape[1] / 2
+        min_reading_error = 25
+
+        # centre points relative to robot camera (i.e. centre of image)
+        pt_robot = np.array([image.shape[1],image.shape[0]])/2
+
+        #contour detection with white filter
+        gray = get_gray(image,clr='w')
+        contours,pts = contour(gray,limit=3,apply_gray=False,pre_process=True,inv_thresh=255)
+
+        for p in pts:
+            pt = (p[0],p[1])
+            draw_cricle(img_debug,pt,clr=(0,0,255))
+            d = RoadDebugItem(road_img=img_debug)
+            self.debug_items.append(d)
+
+        pt_path = np.array([0,0])
+        #check that more than one contour is detected
+        if(len(pts) > 1):
+            pt_path = pts[0] + (pts[1] - pts[0])/2
+
+            displacement = pt_robot - pt_path
+
+            sign_x = displacement[0] / np.abs(displacement[0])
+
+            xerror = sign_x * np.interp(np.abs(displacement[0]),
+                                        [min_reading_error, max_reading_error],
+                                        [0, MAX_ERROR])
+            
+
+        self.last_error = xerror
+        print('X Error: ', xerror)
+
+        return xerror
+
     def detect_stop(self,image):
-        detected = False
-        Y,X = np.where(np.all(image==self.stop_clr,axis=2))
+        detect_flag = 0
+        height_lim = image.shape[0] * 0.95
 
-        if X.size > 0 and Y.size > 0:
-            cx= int(np.average(X))
-            cy= int(np.average(Y))
+        red_mask = hsv_threshold(image,clr='r')
+        _,pts_red = contour(red_mask,limit=3,apply_gray=True,pre_process=False,area_limit=0.2)
+        for pt in pts_red:
+            draw_cricle(red_mask,(pt[0],pt[1]),clr=(0,255,0))
 
-            if(DEBUG):
-                print('detect avg red')
-                cv2.line(image,(cx,0),(cx,720),(0,0,255),1)
-                cv2.line(image,(0,cy),(1280,cy),(0,0,255),1)
+        if(len(pts_red) ==2):
+            if(pts_red[0][1] > height_lim):
+                if(self.drive_state==DriveState.DRIVE_FORWARD):
+                    detect_flag = 1
+                    pt = pts_red[0]
+                    msg = 'STOP DETECTED ' 
+                    cv2.putText(red_mask, msg, (pt[0], pt[1]-50), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
+                elif self.drive_state == DriveState.CROSSING:
+                    detect_flag = 3
+                    pt = pts_red[0]
+                    msg = 'FINISHED CROSSSING ' 
+                    cv2.putText(red_mask, msg, (pt[0], pt[1]-50), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
+            elif(pts_red[0][1] < height_lim and pts_red[1][1] < height_lim):
+                detect_flag = 2
+                msg = 'PEDESTRIAN CROSSED ' 
+                cv2.putText(red_mask, msg, (pt[0], pt[1]-50), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
+        elif len(pts_red) == 1:
+            if (pts_red[0][1] < height_lim and self.drive_state == DriveState.STOPPED):
+                detect_flag = 1
+                msg = 'PEDESTRIAN CROSSED ' 
+                cv2.putText(red_mask, msg, (pt[0], pt[1]-50), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
 
-            if(cy >= STOP_PROXIMITY_THRESHOLD):
-                detected = True
-                print('*****************************************')
-                print('****************At Stop************')
-                print('*****************************************')
-                self.img_processor.save_image()
-        return detected,image
-    
-    def detect_parking_bin(self,image):
-        detected = False
-        Y,X = np.where(np.all(image==self.parking_clr,axis=2))
+        d = RoadDebugItem(stop_img=red_mask)
+        self.debug_items.append(d)
+        
+        self.last_stop_points = pts_red
+        return detect_flag
 
-        if X.size > 0 and Y.size > 0:
-            cx= int(np.average(X))
-            cy=int(np.average(Y))
-
-            if(DEBUG):
-                print('detect avg blue')
-                cv2.line(image,(cx,0),(cx,720),(0,255,0),1)
-                cv2.line(image,(0,cy),(1280,cy),(0,255,0),1)
-
-            if(cx <= image.shape[1]/2 and cy >= image.shape[0]/2):
-                detected = True
-                print('*****************************************')
-                print('****************At Bin************')
-                print('*****************************************')
-                self.img_processor.save_image()
-        return detected, image
-
-
-    
-    def get_error_path(self,image):
-        image_debug = image
-        if(DEBUG):
-            image_debug = np.copy(image)
-
+    def get_error_right(self,image):
+        img_debug = image.copy()
         x_error = 0
+        max_reading_error = image.shape[1] / 2
+        min_reading_error = 25
+        detect = False
+
+        pt_robot = np.array([image.shape[1],image.shape[0]])/2
+
+        gray = get_gray(image,clr='w')
+        _,pts_white = contour(gray,limit=3,apply_gray=False,pre_process=True,inv_thresh=255)
+
+        if(len(pts_white) > 0 ):
+            detect = True
+            right_border = pts_white[np.array(pts_white)[:,0].argmax()]
+            displacement = pt_robot - right_border
+            displacement = displacement + RIGHT_BORDER_MODIFIER
+            sign_x = displacement[0] / np.abs(displacement[0])
+            x_error = sign_x * np.interp(np.abs(displacement[0]),
+                                            [min_reading_error, max_reading_error],
+                                            [0, MAX_ERROR])
+
+        if(detect):
+            pt = (right_border[0],right_border[1])
+            cv2.putText(img_debug, 'RIGHT BORDER', (pt[0]+50, pt[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
+            draw_cricle(img_debug,pt,clr=(0,255,0))
+            d = RoadDebugItem(road_img=img_debug)
+            self.debug_items.append(d)
+
+        self.last_error = x_error
+        print('X Error: ', x_error)
+        return x_error
+            
+
+
+    def get_error_road(self,image):
+        img_debug = image.copy()
+        x_error = 0
+
         max_reading_error = image.shape[1] / 2
         min_reading_error = 25
 
@@ -403,8 +408,10 @@ class PID_controller():
 
 
         Y,X = np.where(np.all(image==self.road_clr,axis=2))
+        detect_flag = False
 
         if X.size > 0 and Y.size > 0 :
+            detect_flag = True
             pt_path = np.array([int(np.average(X)),int(np.average(Y))])
 
             displacement = pt_robot - pt_path
@@ -415,132 +422,22 @@ class PID_controller():
                                             [min_reading_error, max_reading_error],
                                             [0, MAX_ERROR])
 
-            if(DEBUG):
-                cv2.line(image_debug,(pt_path[0],0),(pt_path[0],720),(255,0,0),1)
-                cv2.line(image_debug,(0,pt_path[1]),(1280,pt_path[1]),(255,0,0),1)
+        if(detect_flag):
+            pt = (pt_path[0],pt_path[1])
+            cv2.putText(img_debug, 'ROAD DETECT', (pt[0]+50, pt[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
+            draw_cricle(img_debug,pt,clr=(0,255,0))
+            d = RoadDebugItem(road_img=img_debug)
+            self.debug_items.append(d)
 
 
         self.last_error = x_error
         print('X Error: ', x_error)
-        return x_error, image_debug
+        return x_error
 
-    #gets largest contour points as 2d points on img
-    #contours must be sorted from largest to smallest before being passed to this function
-    #points are sorted based on contour area size from smallest to largest
-    def get_contour_points(self,contours,clr='w',limit=10):
-        #arrays for path contour centre points
-        points = []
-        # Find the 2 biggest contour (if detected), these should be the 2 white lines (due to inversion)
-        for c in contours[:limit]:
-            if clr=='b' and cv2.contourArea(c) >= 0.5*self.img_processor.img_area:
-                continue
-            
-            M = cv2.moments(c)
-            cx = int(M['m10']/M['m00'])
-            cy = int(M['m01']/M['m00'])
-            points.append((cx,cy))
-
-        print('points', points)
-        pts = np.array(points)
-        print('np array points',pts)
-        return pts
-
-    def pointContourTest(self,contour,points):
-        result = []
-
-        for pt in points:
-            print(pt)
-            result.append(cv2.pointPolygonTest(contour,tuple(pt),measureDist=False))
-        
-        return np.array(result)
-
-    #obtains error from camera feed frame by using cv2.findContours
-    #
-    #image is an np array, some useful techniques are applied before contour detection 
-    #to make it less prone to error
-    #
-    #contour basically outlines the pathes/borders on either side of the road
-    #from there the centre of the road to obtained relative to the 2 paths
-    #
-    #The error is the displacement of the robot/camera from the actual path centre
-    #this displacement is mapped to a smaller value with a maximum of max_error using np.interpolate
-    #the mapped displacement is returned as the error to be used for pid calculations
-    def get_error_border_contour(self, image):
-        xerror = 0
-        image_contour = image
-        if(DEBUG):
-            image_contour = np.copy(image)
-
-        max_reading_error = image.shape[1] / 2
-        min_reading_error = 25
-
-        # centre points relative to robot camera (i.e. centre of image)
-        pt_robot = np.array([image.shape[1],image.shape[0]])/2
-
-        #contour detection with white filter
-        gray_w = self.img_processor.get_gray(image,clr='w')
-        contours_w = self.img_processor.get_contours(image,gray_w)
-        pts_w= self.get_contour_points(contours_w)
-
-        #contour detection with blue filter
-        gray_b = self.img_processor.get_gray(image,clr='b')
-        contours_b = self.img_processor.get_contours(image,gray_b)
-        pts_b= self.get_contour_points(contours_b,clr='b')
-        pt_parking = np.array([0,0])
-        if(pts_b.size > 0):
-            pt_parking = pts_b[0]
-            # print('*****************************************')
-            # print('****************NEAR PARKING************')
-            # print('*****************************************')
-        
-        pt_path = np.array([0,0])
-        #check that more than one contour is detected
-        if(pts_w.shape[0] > 1):
-            # if(pts_b.shape[0] > 0):
-            #     results = self.pointContourTest(contours_w[0], pts_b[:0])
-            #     for r in results:
-            #         if(r >= 0):
-            #             xerror = 0
-            #             print('****************LICENSE PLATE IGNORE************')
-            #             print('****************LICENSE PLATE IGNORE************')
-            #             print('****************LICENSE PLATE IGNORE************')
-            # else:    
-                # path centre relative to white lanes/ borders
-            if(0.6*cv2.contourArea(contours_w[0]) >= cv2.contourArea(contours_w[1])):
-                print('*****************************************')
-                print('****************TURNING************')
-                print('*****************************************')
-                if(pts_w[0][0] < pts_w[1][0]):
-                    xerror = -1*MAX_ERROR
-                else:
-                    xerror = MAX_ERROR
-            else:
-                pt_path = pts_w[0] + (pts_w[1] - pts_w[0])/2
-
-                displacement = pt_robot - pt_path
-
-                sign_x = displacement[0] / np.abs(displacement[0])
-
-                xerror = sign_x * np.interp(np.abs(displacement[0]),
-                                            [min_reading_error, max_reading_error],
-                                            [0, MAX_ERROR])
-            
-
-        if(DEBUG):
-            for i in range(len(pts_w[:2])):
-                #for debugging only
-                cv2.line(image_contour,(pts_w[i][0],0),(pts_w[i][0],720),(255,0,0),1)
-                cv2.line(image_contour,(0,pts_w[i][1]),(1280,pts_w[i][1]),(255,0,0),1)
-
-            cv2.line(image_contour,(int(pt_path[0]),0),(int(pt_path[0]),720),(0,255,0),1)
-            cv2.line(image_contour,(0,int(pt_path[1])),(1280,int(pt_path[1])),(0,255,0),1)
-            cv2.line(image_contour,(int(pt_parking[0]),0),(int(pt_parking[0]),720),(0,0,255),1)
-            cv2.line(image_contour,(0,int(pt_parking[1])),(1280,int(pt_parking[1])),(0,0,255),1)
-
-        self.last_error = xerror
-        print('X Error: ', xerror)
-
-        return xerror,image_contour
-
+class RoadDebugItem:
+    def __init__(self,road_img = None, stop_img = None, error_array = None, time_array = None):
+        self.road_img = road_img
+        self.stop_img = stop_img
+        self.err_img = get_plot_img(error_array, time_array)
 
 main()

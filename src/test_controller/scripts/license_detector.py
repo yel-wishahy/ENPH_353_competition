@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from queue import Queue
+from image_utils import clean_imgs,find_centroid,contour,hsv_threshold
 import cv2
 import numpy as np
 import rospy
@@ -28,99 +28,6 @@ def main():
         rate.sleep()
 
 
-def find_centroid(c):
-    """
-    @brief find centroid of a contour
-
-    @param c : contour as a nd.array of 2d points
-
-    @return a 2 point tuple (x,y)
-    """
-    M = cv2.moments(c)
-    try:
-        cx = int(M['m10']/M['m00'])
-        cy = int(M['m01']/M['m00'])
-    except:
-        return (0,0)
-    return (cx,cy)
-
-def contour(img,inv_thresh=255,limit=10,num_sides=-1,area_limit=1,raw=False,debug=False):
-    """
-    @brief Detects largest #limit white contours
-
-    @params:
-        img (numpy array image)
-    @optional params:
-        inv_threshold (integer): ignore if < 0 , useful for white contours (inverse image = inv_threshold - img)
-
-        limit (integer): maximum number of contours to sort 
-
-        num_sides (integer): ignore if -1, only search for contours with this many sides
-
-        area_limit (float): maximum area as a fraction of the total img a contour can have
-
-        raw (bool) : if True, do not preprocess image (invert, blur, hsv threshold)
-
-    @return
-        img (numpy array image): original image with contour traces and centroids marked
-
-        c_out (list of contours/numpy arrays): list of contours sorted from largest to smallest
-    """
-    mask = img.copy()
-    if( not raw):
-        inv = (inv_thresh-img)
-        if(inv_thresh < 0):
-            inv = img
-        gray = cv2.cvtColor(inv, cv2.COLOR_BGR2GRAY)
-
-        # Gaussian blur
-
-        blur = cv2.GaussianBlur(gray,(5,5),0)
-
-        # Color thresholding
-        ret,thresh1 = cv2.threshold(blur,60,255,cv2.THRESH_BINARY_INV)
-
-        # Erode and dilate to remove accidental line detections
-        mask = cv2.erode(thresh1, None, iterations=2)
-        mask = cv2.dilate(mask, None, iterations=2)
-
-    # Find the contours of the frame
-    _,contours,_ = cv2.findContours(mask.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    c_out = []
-
-    # Find the biggest contour (if detected)
-    if len(contours) > 0:
-        #sort largest to smallest by area
-        c_sorted = sorted(contours,key=cv2.contourArea,reverse=True)
-
-        #go through limit largest
-        for c in c_sorted[:limit]:
-            #check area limit
-            if cv2.contourArea(c) >= area_limit*img.shape[0]*img.shape[1]:
-                continue
-
-            if(num_sides > 0):
-                #check polygon ~ square apporximation
-                peri = cv2.arcLength(c, True)
-                approx = cv2.approxPolyDP(c, 0.025 * peri, True)
-                if len(approx) != num_sides:
-                    continue
-                
-            cx,cy = find_centroid(c)
-
-            if(debug):
-                print(cx,cy)
-                print('area', cv2.contourArea(c))
-                print(img.shape[0]*img.shape[1])
-                cv2.line(img,(cx,0),(cx,720),(255,0,0),1)
-                cv2.line(img,(0,cy),(1280,cy),(255,0,0),1)
-                cv2.drawContours(img, c, -1, (0,255,0), 1)
-
-            c_out.append(c)
-
-
-    return img,c_out
-
 def get_license_bin_crop(img):
     """
     @brief detects parking/license bin contour in an image and returns img cropped to that contour
@@ -142,15 +49,15 @@ def get_license_bin_crop(img):
 
 
     #pre-process parking plate gray when not exposed to light
-    inv_dark = (87-img) #inverse threshold to make plate area white is 87 usually (found by testing)
+    inv_dark = (255 - (87-img)) #inverse threshold to make plate area white is 87 usually (found by testing)
 
     #exposed to light
     inv_light = cv2.cvtColor(img.astype('uint8'), cv2.COLOR_BGR2GRAY)
     _,inv_light = cv2.threshold(inv_light, 195, 255, cv2.THRESH_BINARY)#specific threshold is 195 (tested manually)
 
     #contour white with area limit 
-    _,c_out_light = contour(inv_light,limit=3,area_limit=0.1,num_sides=4,raw=True)
-    _,c_out_dark = contour(inv_dark,limit=3,area_limit=0.1,num_sides=4)
+    c_out_light,_ = contour(inv_light,limit=3,area_limit=0.1,num_sides=4)
+    c_out_dark,_ = contour(inv_dark,limit=3,area_limit=0.1,num_sides=4,apply_gray=True,pre_process=True)
 
     final_crop = None
 
@@ -255,60 +162,33 @@ def find_license_plate_contours(image,limit=10):
     return cnts,cnts_sqr
 
 def get_license_plate_crop(img,cnts,y_limits=(10,10)):
-  """
-  @brief given a set of contours likely to be contain license plate segments, crops above and below contour centroids
-
-  @param img: opencv image with license plate
-  @param cnts: list of conoute (ndarray of 2d pts)
-  @param y_limits, optional: tuple of limits to crop (above,below) centroid
-  @param template : cv image, optional, template to compare against
-
-  @return list of cropped images that could contain license plates
-  """
-  crops = []
-  for c in cnts:
-    cy = find_centroid(c)[1]
-    ymin = np.clip(cy-y_limits[0], 0, cy)
-    ymax = np.clip(cy+y_limits[0], cy, img.shape[1]-1)
-    crops.append(img[ymin:ymax,:])
-  
-  return crops
-
-def compare_template(img,template,match_threshold = 0.15):
     """
-    @brief uses cv2.matchTemplate to compare image to reference image
+    @brief given a set of contours likely to be contain license plate segments, crops above and below contour centroids
 
-    @param img : cv2 image to check
-    @param templaate : cv2 image template to compare against
-    @param optional match_threshold, float to dictate minimum match success
+    @param img: opencv image with license plate
+    @param cnts: list of conoute (ndarray of 2d pts)
+    @param y_limits, optional: tuple of limits to crop (above,below) centroid
+    @param template : cv image, optional, template to compare against
 
-    @return bool: similar , float: match similarity
+    @return list of cropped images that could contain license plates
     """
+    crops = []
+    for c in cnts:
+        cy = find_centroid(c)[1]
+        ymin = np.clip(cy-y_limits[0], 0, cy)
+        ymax = np.clip(cy+y_limits[0], cy, img.shape[0]-1)
+        crops.append(img[ymin:ymax,:])
 
-    # if(img is None or template is None or 
-    # img.shape[0] < 1 or img.shape[1] < 1 or 
-    # template.shape[0] < 1 or template.shape[1] < 1):
-    #     return False,0
+    result = hsv_threshold(img,'b')
 
-    temp = template.copy()
-    binary  = pre_process(img,shape=(temp.shape[0],temp.shape[1],1),mode=PreProcessMode.BINARY)
+    Y,X = np.where(np.all(result!=[0,0,0],axis=2))
+    if X.size != 0 and Y.size != 0:
+        cy=int(np.average(Y))
+        ymin = np.clip(cy-y_limits[0], 0, cy)
+        ymax = np.clip(cy+y_limits[0], cy, img.shape[0]-1)
+        crops.append(img[ymin:ymax,:])
 
-    similarity = cv2.matchTemplate(binary,temp,cv2.TM_CCOEFF_NORMED)
-    result = similarity >= match_threshold
-
-    return result, similarity
-
-def clean_imgs(imgs):
-    """
-    @brief makes sure the list of cropped images has images with valid shapes (>0)
-    @return new list with only valid crops
-    """
-    out_list = []
-    for c in imgs:
-        if(c.shape[0] > 0 and c.shape[1] > 0):
-            out_list.append(c)
-    
-    return out_list
+    return crops
 
 def filter_crops(imgs,template):
     """
@@ -347,19 +227,17 @@ def is_license_plate(img):
     
     @return bool : is license plane
     """
-    img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV) #change this accordingly
+    img_hsv = cv2.cvtColor(img.copy(), cv2.COLOR_BGR2HSV)
+    
+    #blue clr range
+    lower=np.array([120,150,0],np.uint8)
+    upper=np.array([140,255,255],np.uint8)
 
-    ## Gen lower mask (0-5) and upper mask (175-180)
-    mask1 = cv2.inRange(img_hsv, (0,50,20), (5,255,255))
-    mask2 = cv2.inRange(img_hsv, (175,50,20), (180,255,255))
+    mask = cv2.inRange(img_hsv, lower, upper)
 
-    ## Merge the mask and crop the red regions
-    mask = cv2.bitwise_or(mask1, mask2 )
-    cropped = cv2.bitwise_and(img, img, mask=mask)
-    gray = cv2.cvtColor(cropped, cv2.COLOR_HSV2BGR)
+    result = cv2.bitwise_and(img, img, mask=mask)
 
-
-    X,Y = np.where(np.all(gray!=[0,0,0],axis=2))
+    X,Y = np.where(np.all(result!=[0,0,0],axis=2))
     
     return (X.size > 0 and Y.size > 0)
 
@@ -401,7 +279,31 @@ def pre_process(input,shape=INPUT_SIZE,mode=PRE_PROCESS_MODE):
     else:
         return process_img(input)
 
-def crop_license_chars(img_in,contour_find=False):
+def compare_template(img,template,match_threshold = 0.15):
+    """
+    @brief uses cv2.matchTemplate to compare image to reference image
+
+    @param img : cv2 image to check
+    @param templaate : cv2 image template to compare against
+    @param optional match_threshold, float to dictate minimum match success
+
+    @return bool: similar , float: match similarity
+    """
+
+    # if(img is None or template is None or 
+    # img.shape[0] < 1 or img.shape[1] < 1 or 
+    # template.shape[0] < 1 or template.shape[1] < 1):
+    #     return False,0
+
+    temp = template.copy()
+    binary  = pre_process(img,shape=(temp.shape[0],temp.shape[1],1),mode=PreProcessMode.BINARY)
+
+    similarity = cv2.matchTemplate(binary,temp,cv2.TM_CCOEFF_NORMED)
+    result = similarity >= match_threshold
+
+    return result, similarity
+
+def crop_license_chars(img_in,contour_find=True):
     """
     @brief crops characters from license plate into 4 images
 
@@ -496,7 +398,6 @@ def crop_id_chars(img):
 
     return crops
 
-
 class LicenseDetector:
     def __init__(self):
         self.bridge = CvBridge()
@@ -514,7 +415,10 @@ class LicenseDetector:
         self.license_plate_pub = rospy.Publisher("/license_plate", String, queue_size=1)
         
         self.bin_debug_pub = rospy.Publisher("/license_detector/bin_debug", Image, queue_size=1)
-        self.plate_debug_pub = rospy.Publisher("/license_detector/plate_debug", Image, queue_size=1)
+        self.platecrop_debug_pub = rospy.Publisher("/license_detector/plates_debug", Image, queue_size=1)
+
+        
+        self.plate_debug_pub = rospy.Publisher("/license_detector/plate_crop_debug", Image, queue_size=1)
         self.chars_debug_pub = rospy.Publisher("/license_detector/chars_debug", Image, queue_size=1)
 
         self.plate_debugF_pub = rospy.Publisher("/license_detector/plate_debug_false", Image, queue_size=100)
@@ -546,6 +450,12 @@ class LicenseDetector:
                 return
 
             plate_crops = get_license_plate_crop(license_bin_crop,plate_contours,y_limits=(20,20))
+            plate_crops = clean_imgs(plate_crops)
+            
+            if(len(plate_crops) > 0 ):
+                stack =  np.concatenate(plate_crops, axis=0)
+                self.platecrop_debug_pub.publish(self.bridge.cv2_to_imgmsg(stack, "bgr8"))
+
             license_plates,location_ids = filter_crops(plate_crops,self.template)
             license_plates = clean_imgs(license_plates)
             location_ids = clean_imgs(location_ids)
@@ -565,7 +475,7 @@ class LicenseDetector:
                 else:
                     self.chars_debugF_pub.publish(self.bridge.cv2_to_imgmsg(d.get_crops(),"bgr8"))
                     self.plate_debugF_pub.publish(self.bridge.cv2_to_imgmsg(d.get_plate(), "bgr8"))
-
+            
 
             self.bin_debug_pub.publish(self.bridge.cv2_to_imgmsg(license_bin_crop,"bgr8"))
             self.license_plate_pub.publish(String("Team1,pass," + id_to_publish + "," + plate_to_publish))
@@ -624,7 +534,7 @@ class LicenseDetector:
         for plate in plates:
             flag = True
             crops = crop_license_chars(plate)
-            crops = pre_process(crops)
+            crops = pre_process(crops,mode=PRE_PROCESS_MODE)
 
             p = self.OCR.predict_image(np.array(crops)) #list of prediction tuples : (char,confidence)
 

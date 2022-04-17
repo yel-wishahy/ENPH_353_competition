@@ -34,6 +34,10 @@ model_name = "ocr_model_2.h5"
 INPUT_SIZE = (100, 100,1) #h,w, #clr Channels
 PRE_PROCESS_MODE = PreProcessMode.BINARY
 
+# model_name = "my_model_V25.h5"
+# INPUT_SIZE = (100,100,1) #h,w, #clr Channels
+# PRE_PROCESS_MODE = PreProcessMode.BINARY
+
 
 model_path = abs_path + '/models/' + model_name
 
