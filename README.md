@@ -1,4 +1,4 @@
-# ENPH_353_competition - time_trials
+# ENPH_353_competition
 
 Repo for ENPH 353 ML Project Course at UBC
 
