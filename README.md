@@ -1,10 +1,22 @@
 # ENPH_353_competition - time_trials
-ENPH 353 ML Project 
 
-**Repo:**  finals
-**Description:** This repo contains a ros package that test controller for time trials that controls the robot in the enph-353 gazebo environment. 
+Repo for ENPH 353 ML Project Course at UBC
 
-**Author(s):** Yousif El-Wishahy
+**Description:** 
+The primary objective of the ENPH 353 Competition was to develop an autonomously driving
+robot, which navigates a simulated world, obeying traffic laws, and returns the license plates and
+associated parking IDs of various cars it sees along the way. In teams of 2, students were tasked with
+developing an agent in a Linux environment which could best complete such a task. Each team was
+granted 4 minutes of simulation time to navigate the simulated track, with points being awarded for
+correct license plates being read, and points deducted for any traffic law violations. For robot control,
+teams are provided with a live image feed, captured from the robot in simulation, which can be used both
+for aiding in navigation, as well as capturing images of license plates. From there, teams must also design,
+train, and make use of a neural network to read these plates, and publish to a ROS topic the appropriate
+license plate, and its corresponding parking ID.
+
+**Author(s):** 
+- Yousif El-Wishahy (yel.wishahy@gmail.com)
+- Carson Sidhu
 
 ## Table of Contents
 1. [Setting up repo and workspace](#setup)
