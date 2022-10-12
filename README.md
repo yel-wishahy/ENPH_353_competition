@@ -6,7 +6,7 @@ Repo for ENPH 353 ML Project Course at UBC
 - Yousif El-Wishahy (yel.wishahy@gmail.com)
 - Carson Sidhu
 
-**Project Report:** [Click Link](https://drive.google.com/file/d/1Igy-Xh6pRhGfFASFc3zEqhgRT5YBEO1u/view)
+[**Project Report Link**](https://drive.google.com/file/d/1Igy-Xh6pRhGfFASFc3zEqhgRT5YBEO1u/view)
 
 **Description:** 
 The primary objective of the ENPH 353 Competition was to develop an autonomously driving
