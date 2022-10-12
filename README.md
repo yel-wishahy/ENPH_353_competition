@@ -2,6 +2,12 @@
 
 Repo for ENPH 353 ML Project Course at UBC
 
+**Author(s):** 
+- Yousif El-Wishahy (yel.wishahy@gmail.com)
+- Carson Sidhu
+
+**Project Report:** [Click Link](https://drive.google.com/file/d/1Igy-Xh6pRhGfFASFc3zEqhgRT5YBEO1u/view)
+
 **Description:** 
 The primary objective of the ENPH 353 Competition was to develop an autonomously driving
 robot, which navigates a simulated world, obeying traffic laws, and returns the license plates and
@@ -13,10 +19,6 @@ teams are provided with a live image feed, captured from the robot in simulation
 for aiding in navigation, as well as capturing images of license plates. From there, teams must also design,
 train, and make use of a neural network to read these plates, and publish to a ROS topic the appropriate
 license plate, and its corresponding parking ID.
-
-**Author(s):** 
-- Yousif El-Wishahy (yel.wishahy@gmail.com)
-- Carson Sidhu
 
 ## Table of Contents
 1. [Setting up repo and workspace](#setup)
